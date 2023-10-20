@@ -1,0 +1,11 @@
+[package]
+name = "nika"
+version = "0.1.0"
+edition = "2021"
+authors = ["Magazzù Giuseppe"]
+description = "Japanese learning CLI"
+repository = "https://github.com/saiteki-kai/nika"
+license = "MIT"
+
+[dependencies]
+clap = { version = "4.4.6", features = ["derive"] }
