@@ -1,3 +1,4 @@
+use super::CommandHandler;
 use clap::Args;
 
 #[derive(Args)]
@@ -6,13 +7,15 @@ pub struct SearchArgs {
     query: Option<String>,
 }
 
-pub fn search(args: &SearchArgs) {
-    match args.query {
-        Some(ref _query) => {
-            println!("Looking for {} ...", _query);
-        }
-        None => {
-            println!("Please provide a word to lookup");
+impl CommandHandler for SearchArgs {
+    fn handle(&self) {
+        match self.query {
+            Some(ref _query) => {
+                println!("Looking for {} ...", _query);
+            }
+            None => {
+                println!("Please provide a word to lookup");
+            }
         }
     }
 }

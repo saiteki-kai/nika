@@ -1,3 +1,4 @@
+use super::lib::CommandHandler;
 use clap::Args;
 
 #[derive(Args)]
@@ -7,10 +8,12 @@ pub struct DailyArgs {
     verbose: bool,
 }
 
-pub fn daily(args: &DailyArgs) {
-    println!("Words for today");
+impl CommandHandler for DailyArgs {
+    fn handle(&self) {
+        println!("Words for today");
 
-    if args.verbose {
-        println!("Verbose");
+        if self.verbose {
+            println!("Verbose");
+        }
     }
 }

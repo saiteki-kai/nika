@@ -1,3 +1,4 @@
+use super::CommandHandler;
 use clap::Args;
 
 #[derive(Args)]
@@ -7,9 +8,11 @@ pub struct ProgressArgs {
     verbose: bool,
 }
 
-pub fn progress(args: &ProgressArgs) {
-    if args.verbose {
-        println!("Verbose");
+impl CommandHandler for ProgressArgs {
+    fn handle(&self) {
+        if self.verbose {
+            println!("Verbose");
+        }
+        println!("your progress summary");
     }
-    println!("your progress summary");
 }

@@ -1,6 +1,7 @@
-use clap::{Parser, Subcommand};
-
 mod commands;
+
+use clap::{Parser, Subcommand};
+use commands::{CommandHandler, DailyArgs, ProgressArgs, SearchArgs};
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = "<Long About>")]
@@ -12,20 +13,20 @@ struct Cli {
 #[derive(Subcommand)]
 enum Command {
     /// Search words
-    Search(commands::search::SearchArgs),
+    Search(SearchArgs),
     /// Show daily words
-    Daily(commands::daily::DailyArgs),
+    Daily(DailyArgs),
     /// Show progress
-    Progress(commands::progress::ProgressArgs),
+    Progress(ProgressArgs),
 }
 
 fn main() {
     let cli = Cli::parse();
 
     match &cli.command {
-        Command::Search(args) => commands::search::search(args),
-        Command::Daily(args) => commands::daily::daily(args),
-        Command::Progress(args) => commands::progress::progress(args),
+        Command::Search(args) => SearchArgs::handle(args),
+        Command::Daily(args) => DailyArgs::handle(args),
+        Command::Progress(args) => ProgressArgs::handle(args),
     }
 }
 
