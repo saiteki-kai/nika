@@ -1,4 +1,6 @@
+mod api;
 mod commands;
+mod utils;
 
 use clap::{Parser, Subcommand};
 use commands::{CommandHandler, DailyArgs, ProgressArgs, SearchArgs};

@@ -9,3 +9,4 @@ license = "MIT"
 
 [dependencies]
 clap = { version = "4.4.6", features = ["derive"] }
+termsize = "0.1.6"
