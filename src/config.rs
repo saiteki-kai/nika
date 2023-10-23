@@ -2,7 +2,7 @@
 extern crate confy;
 extern crate serde;
 
-use confy::ConfyError;
+use anyhow::{Context, Error};
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
@@ -41,14 +41,15 @@ impl Default for UserConfig {
     }
 }
 
-pub fn config_path() -> Result<PathBuf, ConfyError> {
+pub fn config_path() -> Result<PathBuf, Error> {
     confy::get_configuration_file_path(APP_NAME, CONFIG_NAME)
+        .with_context(|| "unable to find the configuration")
 }
 
-pub fn load_config() -> Result<UserConfig, ConfyError> {
-    confy::load(APP_NAME, CONFIG_NAME)
+pub fn load_config() -> Result<UserConfig, Error> {
+    confy::load(APP_NAME, CONFIG_NAME).with_context(|| "unable to load the configuration")
 }
 
-pub fn save_config(config: UserConfig) -> Result<(), ConfyError> {
-    confy::store(APP_NAME, CONFIG_NAME, config)
+pub fn save_config(config: UserConfig) -> Result<(), Error> {
+    confy::store(APP_NAME, CONFIG_NAME, config).with_context(|| "unable to save the configuration")
 }

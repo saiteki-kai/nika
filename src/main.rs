@@ -1,12 +1,14 @@
+#![deny(unsafe_code)]
 mod api;
 mod app;
 mod commands;
 mod config;
 mod utils;
 
-use app::set_global_config;
+use anyhow::Result;
 use clap::{Parser, Subcommand};
 
+use app::set_global_config;
 use commands::{CommandHandler, DailyArgs, ProgressArgs, SearchArgs};
 use config::load_config;
 
@@ -27,8 +29,9 @@ enum Command {
     Progress(ProgressArgs),
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    set_global_config(load_config()?);
+fn run() -> Result<()> {
+    let config = load_config()?;
+    set_global_config(config);
 
     let cli = Cli::parse();
 
@@ -39,6 +42,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     Ok(())
+}
+
+fn main() {
+    if let Err(error) = run() {
+        eprintln!("Error: {:?}", error);
+        std::process::exit(1);
+    }
+
+    std::process::exit(0);
 }
 
 #[test]

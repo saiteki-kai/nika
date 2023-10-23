@@ -1,5 +1,6 @@
-use crate::config::UserConfig;
 use std::sync::OnceLock;
+
+use crate::config::UserConfig;
 
 static CONFIG: OnceLock<UserConfig> = OnceLock::new();
 
