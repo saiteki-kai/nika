@@ -9,14 +9,14 @@ use anyhow::Result;
 use clap::{Parser, Subcommand};
 
 use app::set_global_config;
-use commands::{CommandHandler, DailyArgs, ProgressArgs, SearchArgs};
+use commands::{CommandHandler, DailyArgs, ProgressArgs, RandomArgs, SearchArgs};
 use config::load_config;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = "<Long About>")]
 struct Cli {
     #[command(subcommand)]
-    command: Command,
+    commands: Command,
 }
 
 #[derive(Subcommand)]
@@ -27,6 +27,8 @@ enum Command {
     Daily(DailyArgs),
     /// Show progress
     Progress(ProgressArgs),
+    /// Show a random word or kanji
+    Random(RandomArgs),
 }
 
 fn run() -> Result<()> {
@@ -35,10 +37,11 @@ fn run() -> Result<()> {
 
     let cli = Cli::parse();
 
-    match &cli.command {
+    match &cli.commands {
         Command::Search(args) => SearchArgs::handle(args),
         Command::Daily(args) => DailyArgs::handle(args),
         Command::Progress(args) => ProgressArgs::handle(args),
+        Command::Random(args) => RandomArgs::handle(args),
     }
 
     Ok(())
