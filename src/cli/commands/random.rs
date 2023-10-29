@@ -1,6 +1,6 @@
 use clap::{Args, ValueEnum};
 
-use crate::commands::CommandHandler;
+use crate::cli::commands::CommandHandler;
 
 #[derive(Clone, ValueEnum)]
 pub enum RandomOption {

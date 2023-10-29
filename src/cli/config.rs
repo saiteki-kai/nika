@@ -6,7 +6,9 @@ use anyhow::{Context, Error};
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
-use crate::utils::links::Link;
+use crate::cli::utils;
+
+use utils::links::Link;
 
 const APP_NAME: &str = "nika";
 const CONFIG_NAME: &str = "config";

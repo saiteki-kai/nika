@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::app::get_global_config;
+use crate::cli::app::get_global_config;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Link {

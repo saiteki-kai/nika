@@ -1,16 +1,13 @@
 #![deny(unsafe_code)]
-mod api;
-mod app;
-mod commands;
-mod config;
-mod utils;
+mod cli;
+mod core;
 
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 
-use app::set_global_config;
-use commands::{CommandHandler, DailyArgs, ProgressArgs, RandomArgs, SearchArgs};
-use config::load_config;
+use cli::app::set_global_config;
+use cli::commands::{CommandHandler, DailyArgs, ProgressArgs, RandomArgs, SearchArgs};
+use cli::config::load_config;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = "<Long About>")]
