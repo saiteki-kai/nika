@@ -10,11 +10,6 @@ license = "MIT"
 [dependencies]
 anyhow = "1.0.75"
 clap = { version = "4.4.6", features = ["derive"] }
-colored = { version = "2.0.4", features = ["no-color"] }
 confy = "0.5.1"
 env_logger = "0.10.0"
-fern = { version = "0.6.2", features = ["colored"] }
-humantime = "2.1.0"
-log = "0.4.20"
 serde = { version = "1.0.189", features = ["derive"] }
-termsize = "0.1.6"
