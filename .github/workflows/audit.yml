@@ -1,0 +1,33 @@
+name: Security Audit
+
+on:
+  push:
+    paths:
+      - ".github/workflows/audit.yml"
+      - "**/Cargo.toml"
+      - "**/audit.toml"
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+
+permissions: read-all
+
+env:
+  RUST_BACKTRACE: 1
+  CARGO_TERM_COLOR: always
+  CLICOLOR: 1
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+
+    continue-on-error: true
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Audit Rust dependencies
+        uses: rustsec/audit-check@v1.4.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
