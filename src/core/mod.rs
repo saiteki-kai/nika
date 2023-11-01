@@ -1,1 +1,2 @@
-pub mod words;
+pub mod models;
+
