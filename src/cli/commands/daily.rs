@@ -4,7 +4,7 @@ use crate::core;
 use super::lib::CommandHandler;
 
 use clap::{Args, Subcommand};
-use core::words::{daily_words, Word};
+use core::repository::words::{daily_words, Word};
 
 #[derive(Subcommand)]
 enum DailyCommands {
