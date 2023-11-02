@@ -27,7 +27,8 @@ impl WordRepository {
         self.db.lookup_by_index::<u64, Word>(key)
     }
 
-    pub async fn insert(&self, id: u64, word: Word) -> Result<(), SessionResult> {
+    pub async fn insert(&self, word: Word) -> Result<(), SessionResult> {
+        let id = self.seq.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
         self.db.insert::<u64, Word>(id, word).await
     }
 }

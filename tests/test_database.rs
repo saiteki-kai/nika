@@ -19,8 +19,8 @@ async fn setup_repo() -> WordRepository {
     let data: JMdict = serde_json::from_str(json_str).unwrap();
 
     // insert words in the database
-    for (i, word) in data.words.iter().enumerate() {
-        repo.insert(i as u64, word.clone()).await.unwrap();
+    for word in data.words.iter() {
+        repo.insert(word.clone()).await.unwrap();
     }
 
     repo
@@ -42,3 +42,6 @@ async fn test_get_by_index() {
     let res = repo.get_by_index("000000").unwrap();
     assert!(res.is_none());
 }
+
+// TODO: take care about async behavior for multiple tests
+// TODO: look for a library for setup/teardown with async
