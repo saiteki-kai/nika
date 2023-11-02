@@ -7,7 +7,7 @@ impl Document for Word {}
 
 impl Indexer for Word {
     fn extract(&self) -> Vec<String> {
-        vec![]
+        vec![self.id.clone()]
     }
 }
 
