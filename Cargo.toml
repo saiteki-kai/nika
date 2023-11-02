@@ -20,8 +20,8 @@ tokio = "1.33.0"
 
 [[bin]]
 name = "nika"
-path = "src/main.rs"
+path = "src/bin/main.rs"
 
 [[bin]]
 name = "nika-updater"
-path = "src/updater.rs"
+path = "src/bin/updater.rs"

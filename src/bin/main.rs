@@ -1,13 +1,9 @@
-#![deny(unsafe_code)]
-mod cli;
-mod core;
-
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 
-use cli::app::set_global_config;
-use cli::commands::{CommandHandler, DailyArgs, ProgressArgs, RandomArgs, SearchArgs};
-use cli::config::load_config;
+use nika::cli::app::set_global_config;
+use nika::cli::commands::{CommandHandler, DailyArgs, ProgressArgs, RandomArgs, SearchArgs};
+use nika::cli::config::load_config;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = "<Long About>")]
@@ -28,7 +24,7 @@ enum Command {
     Random(RandomArgs),
 }
 
-fn run() -> Result<()> {
+async fn run() -> Result<()> {
     let config = load_config()?;
     set_global_config(config);
 
@@ -44,8 +40,9 @@ fn run() -> Result<()> {
     Ok(())
 }
 
-fn main() {
-    if let Err(error) = run() {
+#[tokio::main]
+async fn main() {
+    if let Err(error) = run().await {
         eprintln!("Error: {:?}", error);
         std::process::exit(1);
     }

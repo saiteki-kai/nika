@@ -1,10 +1,9 @@
-use crate::cli::utils::links::{generate_hyperlink, get_links, Link};
-use crate::core;
+use clap::{Args, Subcommand};
 
 use super::lib::CommandHandler;
 
-use clap::{Args, Subcommand};
-use core::repository::words::{daily_words, Word};
+use crate::cli::utils::links::{generate_hyperlink, get_links, Link};
+use crate::core::repository::words::{daily_words, Word};
 
 #[derive(Subcommand)]
 enum DailyCommands {
