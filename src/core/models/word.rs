@@ -2,7 +2,6 @@ use darkbird::document::{Document, FullText, Indexer, MaterializedView, Range, R
 
 use crate::core::models::dictionary::Word;
 
-
 impl Document for Word {}
 
 impl Indexer for Word {
