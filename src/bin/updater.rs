@@ -28,10 +28,12 @@ fn generate_bincode(data: JMdict) -> Result<()> {
         .collect();
 
     let file = File::create(WORDS_BIN_PATH)?;
-    bincode::serialize_into(&file, &words).with_context(|| "Failed to serialize words")?;
+    let mut writer = std::io::BufWriter::new(file);
+    bincode::serialize_into(&mut writer, &words).with_context(|| "Failed to serialize words")?;
 
     let file = File::create(TAGS_BIN_PATH)?;
-    bincode::serialize_into(&file, &data.tags).with_context(|| "Failed to serialize tags")?;
+    let mut writer = std::io::BufWriter::new(file);
+    bincode::serialize_into(&mut writer, &data.tags).with_context(|| "Failed to serialize tags")?;
 
     Ok(())
 }
