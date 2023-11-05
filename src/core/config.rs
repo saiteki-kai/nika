@@ -1,12 +1,14 @@
 use std::path::PathBuf;
 
-const APP_NAME: &str = "nika";
+pub const APP_NAME: &str = "nika";
 
-pub const WORDS_JSON_PATH: &str = "./data/jmdict-eng.json";
 pub const WORDS_BIN_PATH: &str = "./data/jmdict-words.bin";
 pub const TAGS_BIN_PATH: &str = "./data/jmdict-tags.bin";
 
-pub fn app_cache_dir() -> String {
+pub const DICTIONARY_RELEASE_URL: &str =
+    "https://api.github.com/repos/scriptin/jmdict-simplified/releases/latest";
+
+pub fn app_cache_dir() -> PathBuf {
     let cache_dir: PathBuf = match dirs::cache_dir() {
         Some(path) => path.join(APP_NAME),
         None => {
@@ -15,5 +17,17 @@ pub fn app_cache_dir() -> String {
         }
     };
 
-    cache_dir.to_string_lossy().to_string()
+    cache_dir
+}
+
+pub fn app_config_dir() -> PathBuf {
+    let config_dir: PathBuf = match dirs::config_local_dir() {
+        Some(path) => path.join(APP_NAME),
+        None => {
+            eprintln!("Could not determine config directory.");
+            std::process::exit(1);
+        }
+    };
+
+    config_dir
 }
