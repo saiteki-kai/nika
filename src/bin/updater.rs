@@ -10,7 +10,11 @@ use reqwest::header::USER_AGENT;
 use serde::de::DeserializeOwned;
 use serde_derive::{Deserialize, Serialize};
 use tar::Archive;
-use tracing::{error, info};
+use tracing::{debug, error, info};
+use tracing_subscriber::{
+    filter::LevelFilter, fmt, prelude::__tracing_subscriber_SubscriberExt, util::SubscriberInitExt,
+    Layer, Registry,
+};
 
 use nika::core::config::*;
 use nika::core::models::dictionary::{JMdict, Word};
@@ -72,21 +76,22 @@ fn download_and_extract_tgz(url: &str, destination_path: &PathBuf) -> Result<Pat
     let response = reqwest::blocking::get(url)?;
     let content = response.bytes()?;
 
-    info!("Download successful {}", url);
+    debug!("Download successful {}", url);
 
     // decompress
     let mut gz = GzDecoder::new(&content[..]);
     let mut buffer = Vec::new();
     gz.read_to_end(&mut buffer)?;
 
-    info!("Decompression successful {}", url);
+    debug!("Decompression successful");
 
     // extract
     let mut archive = Archive::new(&buffer[..]);
 
     if let Some(mut entry) = archive.entries()?.find_map(|e| e.ok()) {
         entry.unpack_in(destination_path)?;
-        info!("Extraction successful {}", url);
+
+        debug!("Extraction successful");
 
         if let Ok(entry_path) = entry.path() {
             return Ok(destination_path.join(entry_path));
@@ -126,35 +131,52 @@ fn generate_bincode(data: JMdict) -> Result<()> {
 }
 
 fn run() -> Result<()> {
-    println!("[1/4] Finding the latest release...");
+    info!("[1/4] Finding the latest release...");
     let (jmdict_url, _) = find_release_url()?;
 
     let config_dir = app_config_dir();
     let dest_dir = config_dir.join("data");
 
-    println!("[2/4] Downloading data...");
+    info!("[2/4] Downloading data...");
     let jmdict_path = download_and_extract_tgz(&jmdict_url, &dest_dir)?;
     // let kanjidic_path = download_and_extract_tgz(&kanjidic_url, &dest_dir)?;
 
-    println!("[3/4] Parsing data...");
+    info!("[3/4] Parsing data...");
     let jmdict_data = parse_json::<JMdict>(&jmdict_path)?;
 
-    println!("[4/4] Generating binary files...");
+    info!("[4/4] Generating binary files...");
     generate_bincode(jmdict_data)?;
 
-    println!("Update completed successfully.");
+    info!("Update completed successfully.");
 
     Ok(())
 }
 
 fn main() {
     let cache_dir = app_cache_dir();
+    let file_appender = tracing_appender::rolling::daily(&cache_dir, "update.log");
 
-    let file_appender = tracing_appender::rolling::never(&cache_dir, "update.log");
-    tracing_subscriber::fmt().with_writer(file_appender).init();
+    Registry::default()
+        .with(
+            fmt::Layer::new()
+                .compact()
+                .without_time()
+                .with_level(false)
+                .with_target(false)
+                .with_writer(std::io::stdout)
+                .with_filter(LevelFilter::INFO),
+        )
+        .with(
+            fmt::Layer::new()
+                .log_internal_errors(false)
+                .with_file(false)
+                .with_writer(file_appender)
+                .with_filter(LevelFilter::DEBUG),
+        )
+        .init();
 
     if let Err(error) = run() {
-        eprintln!(
+        info!(
             "Update failed. Please check the log file for more details at {:?}",
             cache_dir
         );
