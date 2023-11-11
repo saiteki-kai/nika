@@ -119,11 +119,11 @@ fn generate_bincode(data: JMdict) -> Result<()> {
         .map(|word| (word.id.clone(), word))
         .collect();
 
-    let file = File::create(WORDS_BIN_PATH)?;
+    let file = File::create(WORDS_BIN_PATH.as_path())?;
     let mut writer = std::io::BufWriter::new(file);
     bincode::serialize_into(&mut writer, &words).with_context(|| "Failed to serialize words")?;
 
-    let file = File::create(TAGS_BIN_PATH)?;
+    let file = File::create(TAGS_BIN_PATH.as_path())?;
     let mut writer = std::io::BufWriter::new(file);
     bincode::serialize_into(&mut writer, &data.tags).with_context(|| "Failed to serialize tags")?;
 

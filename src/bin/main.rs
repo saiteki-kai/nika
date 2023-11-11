@@ -24,7 +24,7 @@ enum Command {
     Random(RandomArgs),
 }
 
-async fn run() -> Result<()> {
+fn run() -> Result<()> {
     let config = load_config()?;
     set_global_config(config);
 
@@ -40,9 +40,8 @@ async fn run() -> Result<()> {
     Ok(())
 }
 
-#[tokio::main]
-async fn main() {
-    if let Err(error) = run().await {
+fn main() {
+    if let Err(error) = run() {
         eprintln!("Error: {:?}", error);
         std::process::exit(1);
     }
