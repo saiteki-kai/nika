@@ -3,7 +3,7 @@ extern crate confy;
 extern crate serde;
 
 use anyhow::{Context, Error};
-use serde::{Deserialize, Serialize};
+use serde_derive::{Deserialize, Serialize};
 use std::path::PathBuf;
 
 use crate::cli::utils;
