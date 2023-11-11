@@ -21,19 +21,68 @@ fn setup_repo() -> DictionaryRepository {
     DictionaryRepository::from(words, tags)
 }
 
-#[test]
-fn test_get_by_index() {
-    let repo = setup_repo();
+mod get_word_by_id {
+    use super::setup_repo;
 
-    // existing index
-    let res = repo.word("1358280");
-    assert!(res.is_some());
+    #[test]
+    fn test_existing_id() {
+        let repo = setup_repo();
 
-    if let Some(word) = res {
-        assert_eq!(word.id, "1358280");
+        let res = repo.word("1358280");
+        assert!(res.is_some());
+
+        if let Some(word) = res {
+            assert_eq!(word.id, "1358280");
+        }
     }
 
-    // not existing index
-    let res = repo.word("0000");
-    assert!(res.is_none());
+    #[test]
+    fn test_non_existing_id() {
+        let repo = setup_repo();
+
+        let res = repo.word("9999999");
+        assert!(res.is_none());
+    }
+}
+
+mod random_words {
+    use super::setup_repo;
+
+    #[test]
+    fn test_zero_random_words() {
+        let repo = setup_repo();
+
+        let res = repo.random_words(0);
+        assert!(res.is_empty());
+    }
+
+    #[test]
+    fn test_one_random_word() {
+        let repo = setup_repo();
+
+        let res = repo.random_words(1);
+        assert_eq!(res.len(), 1);
+    }
+
+    #[test]
+    fn test_duplicated_words() {
+        let repo = setup_repo();
+
+        let res = repo.random_words(4);
+        assert_eq!(res.len(), 4);
+
+        let mut ids: Vec<String> = res.iter().map(|word| word.id.clone()).collect();
+        ids.sort();
+        ids.dedup();
+        assert_eq!(ids.len(), 4);
+    }
+
+    #[test]
+    fn test_more_than_total_words() {
+        let repo = setup_repo();
+        let total = repo.num_words();
+
+        let res = repo.random_words(total + 1);
+        assert_eq!(res.len(), total);
+    }
 }

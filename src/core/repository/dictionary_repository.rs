@@ -37,6 +37,10 @@ impl DictionaryRepository {
         self.dictionary.get(id)
     }
 
+    pub fn num_words(&self) -> usize {
+        self.dictionary.len()
+    }
+
     pub fn random_words(&self, amount: usize) -> Vec<&Word> {
         let mut rng = rand::thread_rng();
 

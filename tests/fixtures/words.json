@@ -148,6 +148,142 @@
           ]
         }
       ]
+    },
+    {
+      "id": "1318720",
+      "kanji": [{ "common": true, "text": "自由", "tags": [] }],
+      "kana": [
+        {
+          "common": true,
+          "text": "じゆう",
+          "tags": [],
+          "appliesToKanji": ["*"]
+        }
+      ],
+      "sense": [
+        {
+          "partOfSpeech": ["n", "adj-na"],
+          "appliesToKanji": ["*"],
+          "appliesToKana": ["*"],
+          "related": [],
+          "antonym": [],
+          "field": [],
+          "dialect": [],
+          "misc": [],
+          "info": [],
+          "languageSource": [],
+          "gloss": [
+            { "lang": "eng", "gender": null, "type": null, "text": "freedom" },
+            { "lang": "eng", "gender": null, "type": null, "text": "liberty" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1008590",
+      "kanji": [],
+      "kana": [
+        {
+          "common": true,
+          "text": "として",
+          "tags": [],
+          "appliesToKanji": ["*"]
+        }
+      ],
+      "sense": [
+        {
+          "partOfSpeech": ["exp"],
+          "appliesToKanji": ["*"],
+          "appliesToKana": ["*"],
+          "related": [],
+          "antonym": [],
+          "field": [],
+          "dialect": [],
+          "misc": [],
+          "info": [],
+          "languageSource": [],
+          "gloss": [
+            {
+              "lang": "eng",
+              "gender": null,
+              "type": null,
+              "text": "as (i.e. in the role of)"
+            },
+            {
+              "lang": "eng",
+              "gender": null,
+              "type": null,
+              "text": "for (i.e. from the viewpoint of)"
+            }
+          ]
+        },
+        {
+          "partOfSpeech": ["exp"],
+          "appliesToKanji": ["*"],
+          "appliesToKana": ["*"],
+          "related": [],
+          "antonym": [],
+          "field": [],
+          "dialect": [],
+          "misc": [],
+          "info": [],
+          "languageSource": [],
+          "gloss": [
+            {
+              "lang": "eng",
+              "gender": null,
+              "type": null,
+              "text": "apart from... (used to change the topic)"
+            }
+          ]
+        },
+        {
+          "partOfSpeech": ["exp"],
+          "appliesToKanji": ["*"],
+          "appliesToKana": ["*"],
+          "related": [],
+          "antonym": [],
+          "field": [],
+          "dialect": [],
+          "misc": [],
+          "info": ["before a negative form"],
+          "languageSource": [],
+          "gloss": [
+            {
+              "lang": "eng",
+              "gender": null,
+              "type": null,
+              "text": "even (e.g. \"not even a single person\")"
+            }
+          ]
+        },
+        {
+          "partOfSpeech": ["exp"],
+          "appliesToKanji": ["*"],
+          "appliesToKana": ["*"],
+          "related": [["とする", 1]],
+          "antonym": [],
+          "field": [],
+          "dialect": [],
+          "misc": [],
+          "info": ["after a volitional form"],
+          "languageSource": [],
+          "gloss": [
+            {
+              "lang": "eng",
+              "gender": null,
+              "type": null,
+              "text": "thinking that..."
+            },
+            {
+              "lang": "eng",
+              "gender": null,
+              "type": null,
+              "text": "trying to..."
+            }
+          ]
+        }
+      ]
     }
   ]
 }
