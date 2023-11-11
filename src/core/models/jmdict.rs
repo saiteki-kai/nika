@@ -41,7 +41,7 @@ pub struct Kana {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Sense {
-    pub antonym: Vec<Xref>,
+    // pub antonym: Vec<Xref>,
     pub applies_to_kana: Vec<String>,
     pub applies_to_kanji: Vec<String>,
     pub dialect: Vec<Tag>,
@@ -51,7 +51,7 @@ pub struct Sense {
     pub language_source: Vec<LanguageSource>,
     pub misc: Vec<Tag>,
     pub part_of_speech: Vec<Tag>,
-    pub related: Vec<Xref>,
+    // pub related: Vec<Xref>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]

@@ -8,6 +8,8 @@ pub static WORDS_BIN_PATH: Lazy<PathBuf> =
     Lazy::new(|| app_cache_dir().join("data").join("jmdict-words.bin"));
 pub static TAGS_BIN_PATH: Lazy<PathBuf> =
     Lazy::new(|| app_cache_dir().join("data").join("jmdict-tags.bin"));
+pub static KANJI_BIN_PATH: Lazy<PathBuf> =
+    Lazy::new(|| app_cache_dir().join("data").join("kanjidic.bin"));
 
 pub const DICTIONARY_RELEASE_URL: &str =
     "https://api.github.com/repos/scriptin/jmdict-simplified/releases/latest";

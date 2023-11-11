@@ -17,7 +17,8 @@ use tracing_subscriber::{
 };
 
 use nika::core::config::*;
-use nika::core::models::dictionary::{JMdict, Word};
+use nika::core::models::jmdict::{JMdict, Word};
+use nika::core::models::kanjidic::Kanjidic;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Release {
@@ -112,7 +113,15 @@ fn parse_json<T: DeserializeOwned>(path: &PathBuf) -> Result<T> {
     Ok(json_data)
 }
 
-fn generate_bincode(data: JMdict) -> Result<()> {
+fn generate_bincode_kanjidic(data: Kanjidic) -> Result<()> {
+    let file = File::create(KANJI_BIN_PATH.as_path())?;
+    let mut writer = std::io::BufWriter::new(file);
+    bincode::serialize_into(&mut writer, &data).with_context(|| "Failed to serialize kanji")?;
+
+    Ok(())
+}
+
+fn generate_bincode_jmdict(data: JMdict) -> Result<()> {
     let words: HashMap<String, Word> = data
         .words
         .into_par_iter()
@@ -132,20 +141,28 @@ fn generate_bincode(data: JMdict) -> Result<()> {
 
 fn run() -> Result<()> {
     info!("[1/4] Finding the latest release...");
-    let (jmdict_url, _) = find_release_url()?;
+    let (jmdict_url, kanjidic_url) = find_release_url()?;
 
     let config_dir = app_config_dir();
     let dest_dir = config_dir.join("data");
 
-    info!("[2/4] Downloading data...");
+    info!("[2/4] Downloading JMDict data...");
     let jmdict_path = download_and_extract_tgz(&jmdict_url, &dest_dir)?;
-    // let kanjidic_path = download_and_extract_tgz(&kanjidic_url, &dest_dir)?;
 
-    info!("[3/4] Parsing data...");
+    info!("[2/4] Downloading Kanjidic2 data...");
+    let kanjidic_path = download_and_extract_tgz(&kanjidic_url, &dest_dir)?;
+
+    info!("[3/4] Parsing JMDict data...");
     let jmdict_data = parse_json::<JMdict>(&jmdict_path)?;
 
-    info!("[4/4] Generating binary files...");
-    generate_bincode(jmdict_data)?;
+    info!("[3/4] Parsing Kanjidic2 data...");
+    let kanjidic_data = parse_json::<Kanjidic>(&kanjidic_path)?;
+
+    info!("[4/4] Generating JMDict binary...");
+    generate_bincode_jmdict(jmdict_data)?;
+
+    info!("[4/4] Generating Kanjidic2 binary...");
+    generate_bincode_kanjidic(kanjidic_data)?;
 
     info!("Update completed successfully.");
 

@@ -8,7 +8,7 @@ use rand::seq::SliceRandom;
 use rayon::prelude::*;
 
 use crate::core::config::{TAGS_BIN_PATH, WORDS_BIN_PATH};
-use crate::core::models::dictionary::{Tag, Word};
+use crate::core::models::jmdict::{Tag, Word};
 
 pub type WordMap = HashMap<String, Word>;
 pub type TagMap = HashMap<Tag, String>;

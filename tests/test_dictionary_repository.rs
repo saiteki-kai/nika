@@ -1,4 +1,4 @@
-use nika::core::models::dictionary::JMdict;
+use nika::core::models::jmdict::JMdict;
 use nika::core::repository::dictionary_repository::DictionaryRepository;
 use nika::core::repository::dictionary_repository::TagMap;
 use nika::core::repository::dictionary_repository::WordMap;
