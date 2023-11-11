@@ -1,7 +1,7 @@
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 
-use nika::cli::app::set_global_config;
+use nika::cli::app::{init_word_repository, set_global_config};
 use nika::cli::commands::{CommandHandler, DailyArgs, ProgressArgs, RandomArgs, SearchArgs};
 use nika::cli::config::load_config;
 
@@ -27,6 +27,8 @@ enum Command {
 fn run() -> Result<()> {
     let config = load_config()?;
     set_global_config(config);
+
+    init_word_repository();
 
     let cli = Cli::parse();
 

@@ -13,6 +13,7 @@ use crate::core::models::jmdict::{Tag, Word};
 pub type WordMap = HashMap<String, Word>;
 pub type TagMap = HashMap<Tag, String>;
 
+#[derive(Debug)]
 pub struct DictionaryRepository {
     dictionary: WordMap,
     tags: TagMap,
