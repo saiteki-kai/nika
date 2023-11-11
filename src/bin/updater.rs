@@ -16,7 +16,7 @@ use tracing_subscriber::{
     Layer, Registry,
 };
 
-use nika::core::config::*;
+use nika::config::*;
 use nika::core::models::jmdict::{JMdict, Word};
 use nika::core::models::kanjidic::Kanjidic;
 
