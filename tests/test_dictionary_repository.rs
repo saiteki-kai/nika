@@ -45,6 +45,57 @@ mod get_word_by_id {
     }
 }
 
+mod get_words {
+    use super::setup_repo;
+
+    #[test]
+    fn test_all_existing_ids() {
+        let repo = setup_repo();
+
+        let ids: Vec<&str> = vec!["1008590", "1318720"];
+        let n_elements = ids.len();
+
+        let res = repo.words(ids.clone());
+        assert_eq!(res.len(), n_elements);
+
+        for word in res.clone() {
+            assert!(ids.contains(&word.id.as_str()));
+        }
+    }
+
+    #[test]
+    fn test_one_existing_id() {
+        let repo = setup_repo();
+
+        let ids: Vec<&str> = vec!["0000000", "1318720", "0000001"];
+
+        let res = repo.words(ids.clone());
+        assert_eq!(res.len(), 1);
+
+        assert!(ids.contains(&res.first().unwrap().id.as_str()));
+    }
+
+    #[test]
+    fn test_all_non_existing_ids() {
+        let repo = setup_repo();
+
+        let ids: Vec<&str> = vec!["0000000", "0000001"];
+
+        let res = repo.words(ids);
+        assert_eq!(res.len(), 0);
+    }
+
+    #[test]
+    fn test_empty() {
+        let repo = setup_repo();
+
+        let ids: Vec<&str> = vec![];
+
+        let res = repo.words(ids);
+        assert_eq!(res.len(), 0);
+    }
+}
+
 mod random_words {
     use super::setup_repo;
 

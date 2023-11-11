@@ -37,6 +37,12 @@ impl DictionaryRepository {
         self.dictionary.get(id)
     }
 
+    pub fn words(&self, ids: Vec<&str>) -> Vec<&Word> {
+        ids.iter()
+            .filter_map(|&id| self.dictionary.get(id))
+            .collect()
+    }
+
     pub fn num_words(&self) -> usize {
         self.dictionary.len()
     }
