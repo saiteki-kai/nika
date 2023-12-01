@@ -1,8 +1,9 @@
+use anyhow::{Error, Result};
 use std::fs;
 use std::sync::OnceLock;
 
 use crate::cli::config::UserConfig;
-use crate::config::{TAGS_BIN_PATH, WORDS_BIN_PATH};
+use crate::config::{app_cache_dir, app_config_dir, app_data_dir, TAGS_BIN_PATH, WORDS_BIN_PATH};
 use crate::core::repository::dictionary_repository::{DictionaryRepository, TagMap, WordMap};
 
 static CONFIG: OnceLock<UserConfig> = OnceLock::new();
@@ -37,4 +38,12 @@ pub fn word_repository() -> &'static DictionaryRepository {
     WORD_REPOSITORY
         .get()
         .expect("dictionary repository is not initialized")
+}
+
+pub fn init_folders() -> Result<(), Error> {
+    fs::create_dir_all(app_cache_dir().join("data"))?;
+    fs::create_dir_all(app_config_dir())?;
+    fs::create_dir_all(app_data_dir())?;
+
+    Ok(())
 }

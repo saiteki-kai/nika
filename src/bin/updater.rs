@@ -143,8 +143,7 @@ fn run() -> Result<()> {
     info!("[1/4] Finding the latest release...");
     let (jmdict_url, kanjidic_url) = find_release_url()?;
 
-    let config_dir = app_config_dir();
-    let dest_dir = config_dir.join("data");
+    let dest_dir = app_cache_dir().join("data");
 
     info!("[2/4] Downloading JMDict data...");
     let jmdict_path = download_and_extract_tgz(&jmdict_url, &dest_dir)?;
