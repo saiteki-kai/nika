@@ -1,7 +1,7 @@
 use anyhow::Result;
 use clap::{Parser, Subcommand};
 
-use nika::cli::app::{init_folders, init_word_repository, set_global_config};
+use nika::cli::app::{init_dictionary, init_folders, set_global_config};
 use nika::cli::commands::{CommandHandler, DailyArgs, ProgressArgs, RandomArgs, SearchArgs};
 use nika::cli::config::load_config;
 
@@ -29,7 +29,7 @@ fn run() -> Result<()> {
     set_global_config(config);
 
     init_folders()?;
-    init_word_repository();
+    init_dictionary();
 
     let cli = Cli::parse();
 

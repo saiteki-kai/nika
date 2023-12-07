@@ -4,7 +4,7 @@ use std::sync::OnceLock;
 
 use crate::cli::config::UserConfig;
 use crate::config::{app_cache_dir, app_config_dir, app_data_dir, TAGS_BIN_PATH, WORDS_BIN_PATH};
-use crate::core::repository::dictionary_repository::{DictionaryRepository, TagMap, WordMap};
+use crate::core::dictionary::{Dictionary, TagMap, WordMap};
 
 static CONFIG: OnceLock<UserConfig> = OnceLock::new();
 
@@ -16,9 +16,11 @@ pub fn get_global_config() -> &'static UserConfig {
     CONFIG.get().expect("config is not initialized")
 }
 
-static WORD_REPOSITORY: OnceLock<DictionaryRepository> = OnceLock::new();
+static DICTIONARY: OnceLock<Dictionary> = OnceLock::new();
 
-pub fn init_word_repository() {
+pub fn init_dictionary() {
+    // TODO: when not initialized, run the updater
+
     let dict = bincode::deserialize::<WordMap>(
         &fs::read(WORDS_BIN_PATH.as_path()).expect("cannot read words"),
     )
@@ -29,13 +31,13 @@ pub fn init_word_repository() {
     )
     .expect("cannot load tags");
 
-    WORD_REPOSITORY
-        .set(DictionaryRepository::from(dict, tags))
+    DICTIONARY
+        .set(Dictionary::from(dict, tags))
         .expect("could not initialize dictionary");
 }
 
-pub fn word_repository() -> &'static DictionaryRepository {
-    WORD_REPOSITORY
+pub fn dictionary() -> &'static Dictionary {
+    DICTIONARY
         .get()
         .expect("dictionary repository is not initialized")
 }

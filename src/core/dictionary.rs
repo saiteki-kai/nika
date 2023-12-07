@@ -14,24 +14,24 @@ pub type WordMap = HashMap<String, Word>;
 pub type TagMap = HashMap<Tag, String>;
 
 #[derive(Debug)]
-pub struct DictionaryRepository {
+pub struct Dictionary {
     dictionary: WordMap,
     tags: TagMap,
 }
 
-impl DictionaryRepository {
+impl Dictionary {
     pub fn new() -> Result<Self, Error> {
         let dict = bincode::deserialize::<WordMap>(&fs::read(WORDS_BIN_PATH.as_path())?)?;
         let tags = bincode::deserialize::<TagMap>(&fs::read(TAGS_BIN_PATH.as_path())?)?;
 
-        Ok(DictionaryRepository {
+        Ok(Dictionary {
             dictionary: dict,
             tags,
         })
     }
 
     pub fn from(dictionary: WordMap, tags: TagMap) -> Self {
-        DictionaryRepository { dictionary, tags }
+        Dictionary { dictionary, tags }
     }
 
     pub fn word(&self, id: &str) -> Option<&Word> {
@@ -50,6 +50,16 @@ impl DictionaryRepository {
 
     pub fn random_words(&self, amount: usize) -> Vec<&Word> {
         let mut rng = rand::thread_rng();
+
+        let common_words = self
+            .dictionary
+            .values()
+            .collect::<Vec<&Word>>()
+            .iter()
+            .filter(|w| w.kanji.iter().any(|x| x.common))
+            .cloned()
+            .collect::<Vec<&Word>>();
+        println!("common words: {}", common_words.len());
 
         let random_keys: Vec<&String> = self
             .dictionary

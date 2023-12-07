@@ -1,13 +1,13 @@
+use nika::core::dictionary::Dictionary;
+use nika::core::dictionary::TagMap;
+use nika::core::dictionary::WordMap;
 use nika::core::models::jmdict::JMdict;
-use nika::core::repository::dictionary_repository::DictionaryRepository;
-use nika::core::repository::dictionary_repository::TagMap;
-use nika::core::repository::dictionary_repository::WordMap;
 use rayon::prelude::IntoParallelIterator;
 use rayon::prelude::ParallelIterator;
 
 const WORDS: &str = include_str!("fixtures/words.json");
 
-fn setup_repo() -> DictionaryRepository {
+fn setup_repo() -> Dictionary {
     let data: JMdict = serde_json::from_str(WORDS).unwrap();
 
     let words: WordMap = data
@@ -18,7 +18,7 @@ fn setup_repo() -> DictionaryRepository {
 
     let tags: TagMap = data.tags;
 
-    DictionaryRepository::from(words, tags)
+    Dictionary::from(words, tags)
 }
 
 mod get_word_by_id {

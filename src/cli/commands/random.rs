@@ -1,6 +1,6 @@
 use clap::{Args, ValueEnum};
 
-use crate::cli::app::word_repository;
+use crate::cli::app::dictionary;
 use crate::cli::commands::CommandHandler;
 use crate::cli::utils::display::{print_word, DisplayMode};
 
@@ -23,7 +23,7 @@ impl CommandHandler for RandomArgs {
     fn handle(&self) {
         match self.option {
             RandomOption::Word => {
-                let words = word_repository().random_words(self.number.unwrap_or(1));
+                let words = dictionary().random_words(self.number.unwrap_or(1));
 
                 for word in words {
                     print_word(word, DisplayMode::Short);

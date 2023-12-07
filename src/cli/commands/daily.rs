@@ -3,7 +3,7 @@ use clap::{Args, Subcommand};
 use super::lib::CommandHandler;
 
 use crate::cli::utils::links::{generate_hyperlink, get_links, Link};
-use crate::core::repository::words::{daily_words, Word};
+use crate::core::words::{daily_words, Word};
 
 #[derive(Subcommand)]
 enum DailyCommands {
