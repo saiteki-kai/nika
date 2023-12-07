@@ -15,6 +15,7 @@ Cargo.lock
 
 # Database files
 data/
+!data/jlpt.order
 
 # Editor configs
 .vscode/
