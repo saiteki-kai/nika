@@ -38,7 +38,7 @@ impl Dictionary {
         self.dictionary.get(id)
     }
 
-    pub fn words(&self, ids: Vec<&str>) -> Vec<&Word> {
+    pub fn words(&self, ids: &[&str]) -> Vec<&Word> {
         ids.iter()
             .filter_map(|&id| self.dictionary.get(id))
             .collect()

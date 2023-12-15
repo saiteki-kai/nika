@@ -55,7 +55,7 @@ mod get_words {
         let ids: Vec<&str> = vec!["1008590", "1318720"];
         let n_elements = ids.len();
 
-        let res = repo.words(ids.clone());
+        let res = repo.words(&ids);
         assert_eq!(res.len(), n_elements);
 
         for word in res.clone() {
@@ -69,7 +69,7 @@ mod get_words {
 
         let ids: Vec<&str> = vec!["0000000", "1318720", "0000001"];
 
-        let res = repo.words(ids.clone());
+        let res = repo.words(&ids);
         assert_eq!(res.len(), 1);
 
         assert!(ids.contains(&res.first().unwrap().id.as_str()));
@@ -81,7 +81,7 @@ mod get_words {
 
         let ids: Vec<&str> = vec!["0000000", "0000001"];
 
-        let res = repo.words(ids);
+        let res = repo.words(&ids);
         assert_eq!(res.len(), 0);
     }
 
@@ -91,7 +91,7 @@ mod get_words {
 
         let ids: Vec<&str> = vec![];
 
-        let res = repo.words(ids);
+        let res = repo.words(&ids);
         assert_eq!(res.len(), 0);
     }
 }
