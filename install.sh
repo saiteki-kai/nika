@@ -1,6 +1,6 @@
 #!/bin/sh
 
-LOCAL_INSTALL_DIR=$HOME/.local/bin2
+LOCAL_INSTALL_DIR=$HOME/.local/bin
 
 if [ ! -d "$LOCAL_INSTALL_DIR" ]; then
     mkdir -p "$LOCAL_INSTALL_DIR"
