@@ -10,6 +10,9 @@ use rayon::prelude::*;
 use crate::config::{TAGS_BIN_PATH, WORDS_BIN_PATH};
 use crate::core::models::jmdict::{Tag, Word};
 
+use super::models::jmdict::Kanji;
+use super::words;
+
 pub type WordMap = HashMap<String, Word>;
 pub type TagMap = HashMap<Tag, String>;
 
@@ -42,6 +45,32 @@ impl Dictionary {
         ids.iter()
             .filter_map(|&id| self.dictionary.get(id))
             .collect()
+    }
+
+    /// Searches for words in the dictionary that match the given query.
+    ///
+    /// Returns the `common` kanjis.
+    pub fn search(&self, query: &str, common: Option<bool>) -> Vec<Word> {
+        self.dictionary
+            .iter()
+            .filter(|(id, word)| word.kanji.iter().any(|k| k.text.contains(query)))
+            .map(|(id, word)| {
+                if let Some(common) = common {
+                    let mut common_word = word.clone();
+
+                    common_word.kanji = common_word
+                        .kanji
+                        .iter()
+                        .filter(|&k| k.common == common)
+                        .cloned()
+                        .collect::<Vec<Kanji>>();
+
+                    common_word
+                } else {
+                    word.clone()
+                }
+            })
+            .collect::<Vec<Word>>()
     }
 
     pub fn num_words(&self) -> usize {
