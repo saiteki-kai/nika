@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/saiteki-kai/nika/actions/workflows/ci.yml/badge.svg)](https://github.com/saiteki-kai/nika/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/saiteki-kai/nika/graph/badge.svg?token=ostDT5Ufwc)](https://codecov.io/gh/saiteki-kai/nika)
-![GitHub License](https://img.shields.io/github/license/saiteki-kai/nika)
+![GitHub License](https://img.shields.io/github/license/saiteki-kai/Nika)
 
 Nika is a CLI application for daily japanese learning.
 
