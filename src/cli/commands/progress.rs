@@ -1,5 +1,6 @@
-use super::CommandHandler;
 use clap::Args;
+
+use super::CommandHandler;
 
 #[derive(Args)]
 pub struct ProgressArgs {

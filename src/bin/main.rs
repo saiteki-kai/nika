@@ -2,7 +2,7 @@ use anyhow::Result;
 use clap::{Parser, Subcommand};
 
 use nika::cli::app::{init_dictionary, init_folders, set_global_config};
-use nika::cli::commands::{CommandHandler, DailyArgs, ProgressArgs, RandomArgs, SearchArgs};
+use nika::cli::commands::{CommandHandler, ProgressArgs, RandomArgs, SearchArgs, StudyArgs};
 use nika::cli::config::load_config;
 
 #[derive(Parser)]
@@ -16,8 +16,8 @@ struct Cli {
 enum Command {
     /// Search words
     Search(SearchArgs),
-    /// Show daily words
-    Daily(DailyArgs),
+    ///
+    Study(StudyArgs),
     /// Show progress
     Progress(ProgressArgs),
     /// Show a random word or kanji
@@ -34,10 +34,10 @@ fn run() -> Result<()> {
     let cli = Cli::parse();
 
     match &cli.commands {
-        Command::Search(args) => SearchArgs::handle(args),
-        Command::Daily(args) => DailyArgs::handle(args),
-        Command::Progress(args) => ProgressArgs::handle(args),
-        Command::Random(args) => RandomArgs::handle(args),
+        Command::Search(args) => args.handle(),
+        Command::Study(args) => args.handle(),
+        Command::Progress(args) => args.handle(),
+        Command::Random(args) => args.handle(),
     }
 
     Ok(())

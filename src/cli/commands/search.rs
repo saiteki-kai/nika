@@ -1,7 +1,8 @@
+use clap::Args;
+
 use crate::cli::app::dictionary;
 
 use super::CommandHandler;
-use clap::Args;
 
 #[derive(Args)]
 pub struct SearchArgs {

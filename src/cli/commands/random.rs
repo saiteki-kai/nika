@@ -1,8 +1,9 @@
 use clap::{Args, ValueEnum};
 
 use crate::cli::app::dictionary;
-use crate::cli::commands::CommandHandler;
 use crate::cli::utils::display::{print_word, DisplayMode};
+
+use super::CommandHandler;
 
 #[derive(Clone, ValueEnum)]
 pub enum RandomOption {
