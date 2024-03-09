@@ -37,10 +37,10 @@ impl StudyListManager {
     }
 
     pub fn get(&self, name: &str) -> Option<&StudyConfig> {
-        self.stats.list(name)
+        self.stats.get_list(name)
     }
 
     pub fn list(&self) -> Vec<String> {
-        self.stats.lists()
+        self.stats.get_lists()
     }
 }
