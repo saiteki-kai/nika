@@ -77,18 +77,28 @@ impl StudyListStats {
 
 #[cfg(test)]
 mod tests {
+    use std::{collections::HashSet, path::PathBuf};
+
     use tempfile::TempDir;
+    use test_case::test_case;
 
     use crate::core::models::study_list::StudyConfig;
 
     use super::StudyListStats;
 
-    #[test]
-    fn test_creation() {
+    fn setup() -> (PathBuf, StudyListStats) {
         let tmp_dir: TempDir = TempDir::new().unwrap();
         let filepath = tmp_dir.into_path().join("stats.json");
 
         let study_list_stats = StudyListStats::new(filepath.clone());
+
+        (filepath, study_list_stats)
+    }
+
+    #[test]
+    fn test_creation() {
+        let (filepath, study_list_stats) = setup();
+
         assert!(&filepath.exists());
 
         assert_eq!(study_list_stats.config.current, None);
@@ -96,25 +106,103 @@ mod tests {
     }
 
     #[test]
-    fn test_select_invalid_list() {
-        let tmp_dir: TempDir = TempDir::new().unwrap();
-        let filepath = tmp_dir.into_path().join("stats.json");
+    fn test_invalid_list() {
+        let (_filepath, mut study_list_stats) = setup();
 
-        let mut study_list_stats = StudyListStats::new(filepath.clone());
+        assert!(study_list_stats.get_list("invalid_list").is_none());
         assert!(study_list_stats.select_list("invalid_list").is_err());
+        assert!(study_list_stats.remove_stats("invalid_list").is_err());
+
+        assert_eq!(study_list_stats.config.current, None);
+        assert_eq!(study_list_stats.config.lists.len(), 0);
     }
 
     #[test]
-    fn test_select_valid_list() {
-        let tmp_dir: TempDir = TempDir::new().unwrap();
-        let filepath = tmp_dir.into_path().join("stats.json");
+    fn test_select_list() {
+        let (_filepath, mut study_list_stats) = setup();
 
-        let mut study_list_stats = StudyListStats::new(filepath.clone());
-        study_list_stats
-            .update_stats("valid_name", StudyConfig::default())
-            .unwrap();
+        let config = StudyConfig::default();
+        study_list_stats.update_stats("valid_name", config).unwrap();
+
         assert!(study_list_stats.select_list("valid_name").is_ok());
-
         assert_eq!(study_list_stats.config.current.unwrap(), "valid_name");
+    }
+
+    #[test_case("list_1", StudyConfig::default())]
+    #[test_case("list_2", StudyConfig { current_index: 0, items_per_day: 0 })]
+    #[test_case("list_3", StudyConfig { current_index: 42, items_per_day: 5 })]
+    fn test_get_list_valid(name: &str, config: StudyConfig) {
+        let (_filepath, mut study_list_stats) = setup();
+
+        study_list_stats.update_stats(name, config).unwrap();
+        assert_eq!(study_list_stats.get_list(name).unwrap(), &config);
+    }
+
+    #[test_case(vec![])]
+    #[test_case(vec!["list_1"])]
+    #[test_case(vec!["list_1", "list_2"])]
+    #[test_case(vec!["list_1", "list_2", "list_3"])]
+    fn test_get_lists(items: Vec<&str>) {
+        let (_filepath, mut study_list_stats) = setup();
+
+        let config = StudyConfig::default();
+
+        for item in &items {
+            study_list_stats.update_stats(item, config).unwrap();
+        }
+
+        let lists = study_list_stats.get_lists();
+
+        assert_eq!(
+            lists
+                .iter()
+                .map(|s| s.to_string())
+                .collect::<HashSet<String>>(),
+            items
+                .iter()
+                .map(|s| s.to_string())
+                .collect::<HashSet<String>>()
+        );
+        assert_eq!(lists.len(), items.len());
+        assert_eq!(study_list_stats.config.lists.len(), items.len());
+    }
+
+    #[test]
+    fn test_remove_list() {
+        let (_filepath, mut study_list_stats) = setup();
+
+        let config = StudyConfig::default();
+        study_list_stats.update_stats("list_1", config).unwrap();
+        study_list_stats.update_stats("list_2", config).unwrap();
+        study_list_stats.update_stats("list_3", config).unwrap();
+
+        assert_eq!(study_list_stats.get_lists().len(), 3);
+
+        study_list_stats.remove_stats("list_2").unwrap();
+
+        assert!(study_list_stats.get_list("list_1").is_some());
+        assert!(study_list_stats.get_list("list_2").is_none());
+        assert!(study_list_stats.get_list("list_3").is_some());
+
+        assert_eq!(study_list_stats.get_lists().len(), 2);
+    }
+
+    #[test]
+    fn test_remove_selected_list() {
+        let (_filepath, mut study_list_stats) = setup();
+
+        let config = StudyConfig::default();
+        study_list_stats.update_stats("list_1", config).unwrap();
+        study_list_stats.select_list("list_1").unwrap();
+
+        assert!(study_list_stats.get_list("list_1").is_some());
+        assert!(study_list_stats.select_list("list_1").is_ok());
+        assert_eq!(study_list_stats.config.current.clone().unwrap(), "list_1");
+
+        study_list_stats.remove_stats("list_1").unwrap();
+
+        assert!(study_list_stats.get_list("list_1").is_none());
+        assert!(study_list_stats.select_list("list_1").is_err());
+        assert!(study_list_stats.config.current.is_none());
     }
 }
