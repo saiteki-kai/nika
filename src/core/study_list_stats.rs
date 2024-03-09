@@ -1,5 +1,6 @@
-use anyhow::{Error, Ok, Result};
 use std::{fs, path::PathBuf};
+
+use anyhow::{Error, Ok, Result};
 
 use crate::core::models::study_list::{StudyConfig, StudyListConfig};
 
@@ -38,7 +39,19 @@ impl StudyListStats {
     }
 
     pub fn remove_stats(&mut self, list_name: &str) -> Result<(), Error> {
+        if !self.config.lists.contains_key(list_name) {
+            return Err(Error::msg("Not found"));
+        }
+
         self.config.lists.remove(list_name);
+
+        if let Some(current) = &self.config.current {
+            println!("{} {}", current, list_name);
+            if current == list_name {
+                self.config.current = None;
+            }
+        }
+
         self.save()
     }
 
