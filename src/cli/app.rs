@@ -2,17 +2,20 @@ use anyhow::{Error, Result};
 use std::fs;
 use std::sync::OnceLock;
 
-use crate::cli::config::UserConfig;
-use crate::config::{app_cache_dir, app_config_dir, app_data_dir, TAGS_BIN_PATH, WORDS_BIN_PATH};
+use crate::config::{
+    app_cache_dir, app_config_dir, app_data_dir, APP_NAME, CONFIG_NAME, TAGS_BIN_PATH,
+    WORDS_BIN_PATH,
+};
+use crate::core::config::ConfigService;
 use crate::core::dictionary::{Dictionary, TagMap, WordMap};
 
-static CONFIG: OnceLock<UserConfig> = OnceLock::new();
+static CONFIG: OnceLock<ConfigService> = OnceLock::new();
 
-pub fn set_global_config(config: UserConfig) {
+fn set_global_config(config: ConfigService) {
     CONFIG.set(config).expect("could not set config")
 }
 
-pub fn get_global_config() -> &'static UserConfig {
+pub fn config_service() -> &'static ConfigService {
     CONFIG.get().expect("config is not initialized")
 }
 
@@ -46,6 +49,14 @@ pub fn init_folders() -> Result<(), Error> {
     fs::create_dir_all(app_cache_dir().join("data"))?;
     fs::create_dir_all(app_config_dir())?;
     fs::create_dir_all(app_data_dir())?;
+
+    Ok(())
+}
+
+pub fn init_config() -> Result<(), Error> {
+    let config_service = ConfigService::new(APP_NAME.into(), Some(CONFIG_NAME.into()));
+    config_service.load_config()?;
+    set_global_config(config_service);
 
     Ok(())
 }

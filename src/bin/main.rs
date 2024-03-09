@@ -1,9 +1,8 @@
-use anyhow::Result;
+use anyhow::{Error, Result};
 use clap::{Parser, Subcommand};
 
-use nika::cli::app::{init_dictionary, init_folders, set_global_config};
+use nika::cli::app::{init_config, init_dictionary, init_folders};
 use nika::cli::commands::{CommandHandler, ProgressArgs, RandomArgs, SearchArgs, StudyArgs};
-use nika::cli::config::load_config;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = "<Long About>")]
@@ -24,9 +23,8 @@ enum Command {
     Random(RandomArgs),
 }
 
-fn run() -> Result<()> {
-    let config = load_config()?;
-    set_global_config(config);
+fn run() -> Result<(), Error> {
+    init_config()?;
 
     init_folders()?;
     init_dictionary();
