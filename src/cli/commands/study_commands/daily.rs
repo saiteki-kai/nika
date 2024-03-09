@@ -1,8 +1,9 @@
 use clap::Args;
 
 use crate::cli::commands::CommandHandler;
-use crate::cli::utils::links::{generate_hyperlink, get_links, Link};
+use crate::cli::utils::links::{generate_hyperlink, get_links};
 use crate::core::words::{daily_words, Word};
+use crate::utils::Link;
 
 #[derive(Args)]
 pub struct DailyArgs {

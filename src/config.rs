@@ -4,6 +4,7 @@ use std::{fs, path::PathBuf};
 use once_cell::sync::Lazy;
 
 pub const APP_NAME: &str = "nika";
+pub const CONFIG_NAME: &str = "config";
 
 pub static WORDS_BIN_PATH: Lazy<PathBuf> = Lazy::new(|| app_data_dir().join("jmdict-words.bin"));
 pub static TAGS_BIN_PATH: Lazy<PathBuf> = Lazy::new(|| app_data_dir().join("jmdict-tags.bin"));

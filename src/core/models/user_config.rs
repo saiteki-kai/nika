@@ -6,12 +6,7 @@ use anyhow::{Context, Error};
 use serde_derive::{Deserialize, Serialize};
 use std::path::PathBuf;
 
-use crate::cli::utils;
-
-use utils::links::Link;
-
-const APP_NAME: &str = "nika";
-const CONFIG_NAME: &str = "config";
+use crate::utils::Link;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserConfig {
@@ -41,17 +36,4 @@ impl Default for UserConfig {
             ],
         }
     }
-}
-
-pub fn config_path() -> Result<PathBuf, Error> {
-    confy::get_configuration_file_path(APP_NAME, CONFIG_NAME)
-        .with_context(|| "unable to find the configuration")
-}
-
-pub fn load_config() -> Result<UserConfig, Error> {
-    confy::load(APP_NAME, CONFIG_NAME).with_context(|| "unable to load the configuration")
-}
-
-pub fn save_config(config: UserConfig) -> Result<(), Error> {
-    confy::store(APP_NAME, CONFIG_NAME, config).with_context(|| "unable to save the configuration")
 }

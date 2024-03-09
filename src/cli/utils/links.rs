@@ -1,12 +1,4 @@
-use serde_derive::{Deserialize, Serialize};
-
-use crate::cli::app::get_global_config;
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Link {
-    pub text: String,
-    pub base_url: String,
-}
+use crate::utils::Link;
 
 pub fn generate_hyperlink(text: &str, url: &str) -> String {
     format!(
@@ -15,7 +7,7 @@ pub fn generate_hyperlink(text: &str, url: &str) -> String {
     )
 }
 
+// Dictionary links
 pub fn get_links() -> Vec<Link> {
-    let config = get_global_config();
-    config.dictionaries.clone()
+    todo!()
 }
