@@ -16,11 +16,11 @@ impl StudyListStats {
         StudyListStats { filepath, config }
     }
 
-    pub fn list(&self, list_name: &str) -> Option<&StudyConfig> {
+    pub fn get_list(&self, list_name: &str) -> Option<&StudyConfig> {
         self.config.lists.get(list_name)
     }
 
-    pub fn lists(&self) -> Vec<String> {
+    pub fn get_lists(&self) -> Vec<String> {
         self.config.lists.keys().cloned().collect()
     }
 
