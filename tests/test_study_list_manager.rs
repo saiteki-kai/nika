@@ -1,4 +1,4 @@
-use std::{env, path::PathBuf};
+use std::{env, fs, path::PathBuf};
 
 use tempfile::tempdir;
 
@@ -61,6 +61,34 @@ fn test_valid_add() {
 }
 
 #[test]
+fn test_duplicated_add() {
+    let (tmp_path, stats_filepath, mut study_list_manager) = setup();
+
+    let name1 = "list1";
+    let list1 = get_fixture(name1);
+
+    let name2 = "list2";
+    let list2 = get_fixture(name2);
+
+    let result1 = study_list_manager.add(name1, &list1);
+    let result2 = study_list_manager.add(name1, &list2);
+
+    assert!(result1.is_ok());
+    assert!(result2.is_ok());
+
+    assert!(tmp_path.join(name1).exists());
+
+    let a = fs::read_to_string(tmp_path.join(name1)).unwrap();
+    let b = fs::read_to_string(list2).unwrap();
+    assert_eq!(a, b);
+
+    let list_config = StudyListConfig::load(&stats_filepath).unwrap();
+    assert!(list_config.lists.contains_key(name1));
+    assert!(!list_config.lists.contains_key(name2));
+    assert_eq!(list_config.lists.len(), 1);
+}
+
+#[test]
 fn test_invalid_add() {
     let (tmp_path, _stats_filepath, mut study_list_manager) = setup();
 
@@ -95,8 +123,8 @@ fn test_remove() {
 
     let list_config = StudyListConfig::load(&stats_filepath).unwrap();
     let lists = list_config.lists;
-    assert!(!lists.contains_key("list1"));
-    assert!(lists.contains_key("list2"));
+    assert!(!lists.contains_key(list_name1));
+    assert!(lists.contains_key(list_name2));
     assert_eq!(lists.len(), 1);
 }
 
