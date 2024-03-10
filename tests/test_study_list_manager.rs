@@ -183,3 +183,30 @@ fn test_remove_select() {
     let list_config = StudyListConfig::load(&stats_filepath).unwrap();
     assert!(list_config.current.is_none());
 }
+
+#[test]
+fn test_list() {
+    let (_, _, mut study_list_manager) = setup();
+    
+    let lists = study_list_manager.list();
+    assert_eq!(lists.len(), 0);
+
+    let list_name1 = "list1";
+    let list1 = get_fixture(list_name1);
+    study_list_manager.add(list_name1, &list1).unwrap();
+
+    let lists = study_list_manager.list();
+
+    assert!(lists.contains(&list_name1.to_string()));
+    assert_eq!(lists.len(), 1);
+
+    let list_name2 = "list2";
+    let list2 = get_fixture(list_name2);
+    study_list_manager.add(list_name2, &list2).unwrap();
+
+    let lists = study_list_manager.list();
+
+    assert!(lists.contains(&list_name1.to_string()));
+    assert!(lists.contains(&list_name2.to_string()));
+    assert_eq!(lists.len(), 2);
+}
