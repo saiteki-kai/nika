@@ -1,6 +1,8 @@
+use anyhow::{Error, Result};
 use clap::Args;
 
-use crate::cli::commands::CommandHandler;
+use crate::cli::handlers::StudyCommandHandler;
+use crate::core::study_list_manager::StudyListManager;
 
 #[derive(Args)]
 pub struct MarkArgs {
@@ -8,8 +10,9 @@ pub struct MarkArgs {
     pub status: String,
 }
 
-impl CommandHandler for MarkArgs {
-    fn handle(&self) {
-        println!("{:?} marked as {:?}", self.word, self.status)
+impl StudyCommandHandler for MarkArgs {
+    fn handle(&self, _manager: &mut StudyListManager) -> Result<(), Error> {
+        println!("{:?} marked as {:?}", self.word, self.status);
+        Ok(())
     }
 }

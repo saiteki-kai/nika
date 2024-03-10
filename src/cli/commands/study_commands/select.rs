@@ -1,12 +1,17 @@
+use anyhow::{Error, Ok, Result};
 use clap::Args;
 
-use crate::cli::commands::CommandHandler;
+use crate::cli::handlers::StudyCommandHandler;
+use crate::core::study_list_manager::StudyListManager;
 
 #[derive(Args)]
 pub struct SelectArgs {
     name: String,
 }
 
-impl CommandHandler for SelectArgs {
-    fn handle(&self) {}
+impl StudyCommandHandler for SelectArgs {
+    fn handle(&self, manager: &mut StudyListManager) -> Result<(), Error> {
+        manager.select(&self.name)?;
+        Ok(())
+    }
 }

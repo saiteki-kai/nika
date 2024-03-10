@@ -1,6 +1,7 @@
+use anyhow::{Error, Result};
 use clap::Args;
 
-use super::CommandHandler;
+use crate::cli::handlers::CommandHandler;
 
 #[derive(Args)]
 pub struct ProgressArgs {
@@ -10,10 +11,12 @@ pub struct ProgressArgs {
 }
 
 impl CommandHandler for ProgressArgs {
-    fn handle(&self) {
+    fn handle(&self) -> Result<(), Error> {
         if self.verbose {
             println!("Verbose");
         }
         println!("your progress summary");
+
+        Ok(())
     }
 }

@@ -1,7 +1,11 @@
+use anyhow::{Error, Result};
 use clap::{Args, Subcommand};
 
+use crate::cli::handlers::{CommandHandler, StudyCommandHandler};
+use crate::config::{app_data_dir, STUDY_STATS_PATH};
+use crate::core::study_list_manager::StudyListManager;
+
 use super::study_commands::{AddArgs, DailyArgs, ListArgs, MarkArgs, RemoveArgs, SelectArgs};
-use super::CommandHandler;
 
 #[derive(Subcommand)]
 pub enum StudyCommands {
@@ -20,11 +24,17 @@ pub struct StudyArgs {
 }
 
 impl CommandHandler for StudyArgs {
-    fn handle(&self) {
+    fn handle(&self) -> Result<(), Error> {
+        let mut study_list_manager =
+            StudyListManager::new(app_data_dir(), STUDY_STATS_PATH.to_path_buf())?;
+
         match &self.commands {
-            StudyCommands::Mark(args) => args.handle(),
-            StudyCommands::Daily(args) => args.handle(),
-            _ => (),
+            StudyCommands::Mark(args) => args.handle(&mut study_list_manager),
+            StudyCommands::Daily(args) => args.handle(&mut study_list_manager),
+            StudyCommands::Add(args) => args.handle(&mut study_list_manager),
+            StudyCommands::Select(args) => args.handle(&mut study_list_manager),
+            StudyCommands::Remove(args) => args.handle(&mut study_list_manager),
+            StudyCommands::List(args) => args.handle(&mut study_list_manager),
         }
     }
 }

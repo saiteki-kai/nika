@@ -1,8 +1,8 @@
+use anyhow::{Error, Result};
 use clap::Args;
 
 use crate::cli::app::dictionary;
-
-use super::CommandHandler;
+use crate::cli::handlers::CommandHandler;
 
 #[derive(Args)]
 pub struct SearchArgs {
@@ -14,7 +14,7 @@ pub struct SearchArgs {
 }
 
 impl CommandHandler for SearchArgs {
-    fn handle(&self) {
+    fn handle(&self) -> Result<(), Error> {
         match self.query {
             Some(ref _query) => {
                 let results = dictionary().search(_query, self.common);
@@ -29,5 +29,7 @@ impl CommandHandler for SearchArgs {
                 println!("Please provide a word to lookup");
             }
         }
+
+        Ok(())
     }
 }

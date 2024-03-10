@@ -1,9 +1,9 @@
+use anyhow::{Error, Result};
 use clap::{Args, ValueEnum};
 
 use crate::cli::app::dictionary;
+use crate::cli::handlers::CommandHandler;
 use crate::cli::utils::display::{print_word, DisplayMode};
-
-use super::CommandHandler;
 
 #[derive(Clone, ValueEnum)]
 pub enum RandomOption {
@@ -21,7 +21,7 @@ pub struct RandomArgs {
 }
 
 impl CommandHandler for RandomArgs {
-    fn handle(&self) {
+    fn handle(&self) -> Result<(), Error> {
         match self.option {
             RandomOption::Word => {
                 let words = dictionary().random_words(self.number.unwrap_or(1));
@@ -32,5 +32,7 @@ impl CommandHandler for RandomArgs {
             }
             RandomOption::Kanji => println!("random kanji"),
         }
+
+        Ok(())
     }
 }

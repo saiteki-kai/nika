@@ -1,7 +1,9 @@
+use anyhow::{Error, Ok, Result};
 use clap::Args;
 
-use crate::cli::commands::CommandHandler;
+use crate::cli::handlers::StudyCommandHandler;
 use crate::cli::utils::links::{generate_hyperlink, get_links};
+use crate::core::study_list_manager::StudyListManager;
 use crate::core::words::{daily_words, Word};
 use crate::utils::Link;
 
@@ -12,8 +14,8 @@ pub struct DailyArgs {
     summary: bool,
 }
 
-impl CommandHandler for DailyArgs {
-    fn handle(&self) {
+impl StudyCommandHandler for DailyArgs {
+    fn handle(&self, _manager: &mut StudyListManager) -> Result<(), Error> {
         if self.summary {
             println!("NIKA • Today's Summary:\n");
 
@@ -26,7 +28,7 @@ impl CommandHandler for DailyArgs {
             });
             println!();
 
-            return;
+            return Ok(());
         }
 
         println!("Japanese Daily Words\n");
@@ -38,6 +40,8 @@ impl CommandHandler for DailyArgs {
         println!("1. 放す (はなす)");
         println!("   to release; to let go; to free; to set free; to let loose; to turn loose");
         println!("   ");
+
+        Ok(())
     }
 }
 

@@ -2,7 +2,8 @@ use anyhow::{Error, Result};
 use clap::{Parser, Subcommand};
 
 use nika::cli::app::{init_config, init_dictionary, init_folders};
-use nika::cli::commands::{CommandHandler, ProgressArgs, RandomArgs, SearchArgs, StudyArgs};
+use nika::cli::commands::{ProgressArgs, RandomArgs, SearchArgs, StudyArgs};
+use nika::cli::handlers::CommandHandler;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = "<Long About>")]
@@ -37,8 +38,6 @@ fn run() -> Result<(), Error> {
         Command::Progress(args) => args.handle(),
         Command::Random(args) => args.handle(),
     }
-
-    Ok(())
 }
 
 fn main() {

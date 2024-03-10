@@ -187,7 +187,7 @@ fn test_remove_select() {
 #[test]
 fn test_list() {
     let (_, _, mut study_list_manager) = setup();
-    
+
     let lists = study_list_manager.list();
     assert_eq!(lists.len(), 0);
 
