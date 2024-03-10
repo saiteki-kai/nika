@@ -30,7 +30,7 @@ impl StudyListManager {
         self.stats.remove_stats(name)
     }
 
-    pub fn select_study_list(&mut self, name: &str) -> Result<()> {
+    pub fn select(&mut self, name: &str) -> Result<()> {
         self.stats.select_list(name)
     }
 

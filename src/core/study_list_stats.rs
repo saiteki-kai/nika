@@ -17,23 +17,25 @@ pub enum StudyListError {
 
 pub type Result<T> = result::Result<T, StudyListError>;
 
-fn load(filepath: &PathBuf) -> Result<StudyListConfig> {
-    if !filepath.exists() {
-        let json = serde_json::to_string::<StudyListConfig>(&StudyListConfig::default())?;
-        fs::write(filepath, json)?;
+impl StudyListConfig {
+    pub fn load(filepath: &PathBuf) -> Result<StudyListConfig> {
+        if !filepath.exists() {
+            let json = serde_json::to_string::<StudyListConfig>(&StudyListConfig::default())?;
+            fs::write(filepath, json)?;
+        }
+
+        let file = fs::read_to_string(filepath)?;
+        let config = serde_json::from_str::<StudyListConfig>(&file)?;
+
+        Ok(config)
     }
 
-    let file = fs::read_to_string(filepath)?;
-    let config = serde_json::from_str::<StudyListConfig>(&file)?;
+    pub fn save(filepath: &PathBuf, config: &StudyListConfig) -> Result<()> {
+        let json = serde_json::to_string::<StudyListConfig>(config)?;
+        fs::write(filepath, json)?;
 
-    Ok(config)
-}
-
-fn save(filepath: &PathBuf, config: &StudyListConfig) -> Result<()> {
-    let json = serde_json::to_string::<StudyListConfig>(config)?;
-    fs::write(filepath, json)?;
-
-    Ok(())
+        Ok(())
+    }
 }
 
 pub struct StudyListStats {
@@ -43,7 +45,7 @@ pub struct StudyListStats {
 
 impl StudyListStats {
     pub fn new(filepath: PathBuf) -> Result<Self> {
-        let config = load(&filepath)?;
+        let config = StudyListConfig::load(&filepath)?;
 
         Ok(StudyListStats { filepath, config })
     }
@@ -60,7 +62,7 @@ impl StudyListStats {
         if self.config.lists.contains_key(list_name) {
             self.config.current = Some(list_name.to_string());
 
-            return save(&self.filepath, &self.config);
+            return StudyListConfig::save(&self.filepath, &self.config);
         }
 
         Err(StudyListError::ListNotFound)
@@ -69,7 +71,7 @@ impl StudyListStats {
     pub fn update_stats(&mut self, list_name: &str, config: StudyConfig) -> Result<()> {
         self.config.lists.insert(list_name.to_string(), config);
 
-        save(&self.filepath, &self.config)
+        StudyListConfig::save(&self.filepath, &self.config)
     }
 
     pub fn remove_stats(&mut self, list_name: &str) -> Result<()> {
@@ -85,7 +87,7 @@ impl StudyListStats {
             }
         }
 
-        save(&self.filepath, &self.config)
+        StudyListConfig::save(&self.filepath, &self.config)
     }
 }
 
@@ -98,7 +100,7 @@ mod tests {
 
     use crate::core::{
         models::study_list::{StudyConfig, StudyListConfig},
-        study_list_stats::{load, save, StudyListError},
+        study_list_stats::StudyListError,
     };
 
     use super::StudyListStats;
@@ -233,12 +235,12 @@ mod tests {
         let config = StudyListConfig::default();
 
         assert!(matches!(
-            load(filepath).err().unwrap(),
+            StudyListConfig::load(filepath).err().unwrap(),
             StudyListError::Io(_)
         ));
 
         assert!(matches!(
-            save(filepath, &config).err().unwrap(),
+            StudyListConfig::save(filepath, &config).err().unwrap(),
             StudyListError::Io(_)
         ));
     }
