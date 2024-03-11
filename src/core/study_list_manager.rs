@@ -47,7 +47,7 @@ impl StudyListManager {
         self.stats.update_stats(name, config)
     }
 
-    pub fn get(&self, name: &str) -> Option<&StudyConfig> {
+    pub fn get(&self, name: &str) -> Result<&StudyConfig> {
         self.stats.get_list(name)
     }
 

@@ -50,8 +50,11 @@ impl StudyListStats {
         Ok(StudyListStats { filepath, config })
     }
 
-    pub fn get_list(&self, list_name: &str) -> Option<&StudyConfig> {
-        self.config.lists.get(list_name)
+    pub fn get_list(&self, list_name: &str) -> Result<&StudyConfig> {
+        self.config
+            .lists
+            .get(list_name)
+            .ok_or(StudyListError::ListNotFound)
     }
 
     pub fn get_lists(&self) -> Vec<String> {
@@ -133,7 +136,7 @@ mod tests {
     fn test_invalid_list() {
         let (_, mut study_list_stats) = setup();
 
-        assert!(study_list_stats.get_list("invalid_list").is_none());
+        assert!(study_list_stats.get_list("invalid_list").is_err());
         assert!(study_list_stats.select_list("invalid_list").is_err());
         assert!(study_list_stats.remove_stats("invalid_list").is_err());
 
@@ -204,9 +207,9 @@ mod tests {
 
         study_list_stats.remove_stats("list_2").unwrap();
 
-        assert!(study_list_stats.get_list("list_1").is_some());
-        assert!(study_list_stats.get_list("list_2").is_none());
-        assert!(study_list_stats.get_list("list_3").is_some());
+        assert!(study_list_stats.get_list("list_1").is_ok());
+        assert!(study_list_stats.get_list("list_2").is_err());
+        assert!(study_list_stats.get_list("list_3").is_ok());
 
         assert_eq!(study_list_stats.get_lists().len(), 2);
     }
@@ -219,13 +222,13 @@ mod tests {
         study_list_stats.update_stats("list_1", config).unwrap();
         study_list_stats.select_list("list_1").unwrap();
 
-        assert!(study_list_stats.get_list("list_1").is_some());
+        assert!(study_list_stats.get_list("list_1").is_ok());
         assert!(study_list_stats.select_list("list_1").is_ok());
         assert_eq!(study_list_stats.config.current.clone().unwrap(), "list_1");
 
         study_list_stats.remove_stats("list_1").unwrap();
 
-        assert!(study_list_stats.get_list("list_1").is_none());
+        assert!(study_list_stats.get_list("list_1").is_err());
         assert!(study_list_stats.select_list("list_1").is_err());
         assert!(study_list_stats.config.current.is_none());
     }

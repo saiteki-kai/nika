@@ -1,4 +1,4 @@
-use anyhow::{Error, Result};
+use anyhow::{Context, Error, Result};
 use clap::Args;
 
 use crate::cli::handlers::StudyCommandHandler;
@@ -14,7 +14,9 @@ pub struct SetArgs {
 
 impl StudyCommandHandler for SetArgs {
     fn handle(&self, manager: &mut StudyListManager) -> Result<(), Error> {
-        if let (Some(count), Some(list_config)) = (self.items_per_day, manager.get(&self.name)) {
+        let list_config = manager.get(&self.name).with_context(|| "List not found")?;
+
+        if let Some(count) = self.items_per_day {
             let config = StudyConfig {
                 items_per_day: count,
                 ..*list_config
