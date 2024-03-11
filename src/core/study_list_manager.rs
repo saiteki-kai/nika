@@ -7,13 +7,19 @@ use super::study_list_stats::{Result, StudyListStats};
 pub struct StudyListManager {
     dirpath: PathBuf,
     stats: StudyListStats,
+    pub current: Option<String>,
 }
 
 impl StudyListManager {
     pub fn new(dirpath: PathBuf, stats_file: PathBuf) -> Result<Self> {
         let stats = StudyListStats::new(stats_file)?;
+        let current = stats.get_selected_list();
 
-        Ok(StudyListManager { dirpath, stats })
+        Ok(StudyListManager {
+            dirpath,
+            stats,
+            current,
+        })
     }
 
     pub fn add(&mut self, name: &str, filepath: &PathBuf) -> Result<()> {
@@ -31,6 +37,12 @@ impl StudyListManager {
     }
 
     pub fn select(&mut self, name: &str) -> Result<()> {
+        self.stats.select_list(name)?;
+        self.current = Some(name.to_string());
+
+        Ok(())
+    }
+
     pub fn set(&mut self, name: &str, config: StudyConfig) -> Result<()> {
         self.stats.update_stats(name, config)
     }

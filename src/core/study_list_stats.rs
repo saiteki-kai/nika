@@ -68,6 +68,10 @@ impl StudyListStats {
         Err(StudyListError::ListNotFound)
     }
 
+    pub fn get_selected_list(&self) -> Option<String> {
+        self.config.current.clone()
+    }
+
     pub fn update_stats(&mut self, list_name: &str, config: StudyConfig) -> Result<()> {
         self.config.lists.insert(list_name.to_string(), config);
 
