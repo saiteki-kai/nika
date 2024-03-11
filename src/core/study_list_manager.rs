@@ -31,7 +31,8 @@ impl StudyListManager {
     }
 
     pub fn select(&mut self, name: &str) -> Result<()> {
-        self.stats.select_list(name)
+    pub fn set(&mut self, name: &str, config: StudyConfig) -> Result<()> {
+        self.stats.update_stats(name, config)
     }
 
     pub fn get(&self, name: &str) -> Option<&StudyConfig> {

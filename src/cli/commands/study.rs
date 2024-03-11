@@ -5,7 +5,9 @@ use crate::cli::handlers::{CommandHandler, StudyCommandHandler};
 use crate::config::{app_data_dir, STUDY_STATS_PATH};
 use crate::core::study_list_manager::StudyListManager;
 
-use super::study_commands::{AddArgs, DailyArgs, ListArgs, MarkArgs, RemoveArgs, SelectArgs};
+use super::study_commands::{
+    AddArgs, DailyArgs, ListArgs, MarkArgs, RemoveArgs, SelectArgs, SetArgs,
+};
 
 #[derive(Subcommand)]
 pub enum StudyCommands {
@@ -15,6 +17,7 @@ pub enum StudyCommands {
     Remove(RemoveArgs),
     Daily(DailyArgs),
     Mark(MarkArgs),
+    Set(SetArgs),
 }
 
 #[derive(Args)]
@@ -35,6 +38,7 @@ impl CommandHandler for StudyArgs {
             StudyCommands::Select(args) => args.handle(&mut study_list_manager),
             StudyCommands::Remove(args) => args.handle(&mut study_list_manager),
             StudyCommands::List(args) => args.handle(&mut study_list_manager),
+            StudyCommands::Set(args) => args.handle(&mut study_list_manager),
         }
     }
 }
