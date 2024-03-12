@@ -22,15 +22,19 @@ impl StudyListManager {
         })
     }
 
+    fn list_filepath(&self, name: &str) -> PathBuf {
+        self.dirpath.join(name)
+    }
+
     pub fn add(&mut self, name: &str, filepath: &PathBuf) -> Result<()> {
-        let new_filepath = self.dirpath.join(name);
+        let new_filepath = self.list_filepath(name);
         fs::copy(filepath, new_filepath)?;
 
         self.stats.update_stats(name, StudyConfig::default())
     }
 
     pub fn remove(&mut self, name: &str) -> Result<()> {
-        let filepath = self.dirpath.join(name);
+        let filepath = self.list_filepath(name);
         fs::remove_file(filepath)?;
 
         self.stats.remove_stats(name)
@@ -53,5 +57,24 @@ impl StudyListManager {
 
     pub fn list(&self) -> Vec<String> {
         self.stats.get_lists()
+    }
+
+    pub fn study(&self, name: &str, daily: bool) -> Result<Vec<String>> {
+        let config = self.stats.get_list(name)?;
+
+        let reader = fs::read_to_string(self.list_filepath(name))?;
+        let id_list = reader.lines();
+
+        let items: Vec<String> = if !daily {
+            id_list.map(String::from).collect()
+        } else {
+            id_list
+                .skip(config.current_index)
+                .take(config.items_per_day)
+                .map(String::from)
+                .collect()
+        };
+
+        Ok(items)
     }
 }

@@ -1,4 +1,4 @@
-use crate::utils::Link;
+use crate::{cli::app::user_config, utils::Link};
 
 pub fn generate_hyperlink(text: &str, url: &str) -> String {
     format!(
@@ -9,5 +9,5 @@ pub fn generate_hyperlink(text: &str, url: &str) -> String {
 
 // Dictionary links
 pub fn get_links() -> Vec<Link> {
-    todo!()
+    user_config().clone().dictionaries
 }

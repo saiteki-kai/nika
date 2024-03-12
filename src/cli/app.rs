@@ -8,14 +8,15 @@ use crate::config::{
 };
 use crate::core::config::ConfigService;
 use crate::core::dictionary::{Dictionary, TagMap, WordMap};
+use crate::core::models::user_config::UserConfig;
 
-static CONFIG: OnceLock<ConfigService> = OnceLock::new();
+static CONFIG: OnceLock<UserConfig> = OnceLock::new();
 
-fn set_global_config(config: ConfigService) {
+fn set_global_config(config: UserConfig) {
     CONFIG.set(config).expect("could not set config")
 }
 
-pub fn config_service() -> &'static ConfigService {
+pub fn user_config() -> &'static UserConfig {
     CONFIG.get().expect("config is not initialized")
 }
 
@@ -55,8 +56,8 @@ pub fn init_folders() -> Result<(), Error> {
 
 pub fn init_config() -> Result<(), Error> {
     let config_service = ConfigService::new(APP_NAME.into(), Some(CONFIG_NAME.into()));
-    config_service.load_config()?;
-    set_global_config(config_service);
+    let config = config_service.load_config()?;
+    set_global_config(config);
 
     Ok(())
 }
