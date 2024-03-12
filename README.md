@@ -4,28 +4,28 @@
 [![codecov](https://codecov.io/gh/saiteki-kai/nika/graph/badge.svg?token=ostDT5Ufwc)](https://codecov.io/gh/saiteki-kai/nika)
 ![GitHub License](https://img.shields.io/github/license/saiteki-kai/Nika)
 
-Nika is a CLI application for daily japanese learning.
+Nika is a command-line interface (CLI) tool designed to make learning Japanese a part of your daily routine right within your terminal. This project is my first Rust application, developed to support my Japanese studies and Rust programming skills.
 
 ## Features
 
 Main Features:
 
 - [x] Dictionary updater
-- [ ] Daily words
-- [ ] Daily kanji
-- [ ] Mark word/kanji status (skipped, done, etc.)
-- [ ] User preferences (e.g. number of daily words/kanjis)
-- [ ] Progress tracking (e.g. streak, average words/kanjis per day)
+- [x] Dictionary simple search
 - [x] Random words
-- [ ] Random kanjis
-- [ ] Dictionary search
-- [ ] Examples
-- [ ] Links to online dictionaries
+- [x] User preferences (e.g. number of daily words)
+- [x] Study lists
+- [ ] Daily words
+- [ ] Mark word/kanji status (skipped, done, etc.)
+- [ ] Progress tracking (e.g. streak, average words per day)
+- [ ] Word details (e.g. examples, links to online dictionaries)
+- [ ] Dictionary advanced search
+- [ ] Kanji
 
 Future Features:
 
 - [ ] DBpedia definitions
-- [ ] Morphological analysis of sensentes
+- [ ] Morphological analysis of sentences
 - [ ] Daily grammar
 - [ ] Favorites
 - [ ] History
