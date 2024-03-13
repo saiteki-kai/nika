@@ -6,8 +6,8 @@ use crate::cli::commands::study_commands::utils::get_list_name;
 use crate::cli::handlers::StudyCommandHandler;
 use crate::cli::utils::links::{generate_hyperlink, get_links};
 use crate::core::models::jmdict::Word;
+use crate::core::models::link::Link;
 use crate::core::study_list_manager::StudyListManager;
-use crate::utils::Link;
 
 #[derive(Args)]
 pub struct DailyArgs {

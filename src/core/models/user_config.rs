@@ -6,7 +6,7 @@ use anyhow::{Context, Error};
 use serde_derive::{Deserialize, Serialize};
 use std::path::PathBuf;
 
-use crate::utils::Link;
+use crate::core::models::link::Link;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserConfig {

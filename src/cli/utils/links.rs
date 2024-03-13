@@ -1,4 +1,4 @@
-use crate::{cli::app::user_config, utils::Link};
+use crate::{cli::app::user_config, core::models::link::Link};
 
 pub fn generate_hyperlink(text: &str, url: &str) -> String {
     format!(
