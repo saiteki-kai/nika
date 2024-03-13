@@ -1,5 +1,5 @@
 use serde_derive::{Deserialize, Serialize};
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, Copy)]
 pub struct StudyConfig {
@@ -19,5 +19,5 @@ impl Default for StudyConfig {
 #[derive(Serialize, Deserialize, Default, Debug, PartialEq, Clone)]
 pub struct StudyListConfig {
     pub current: Option<String>,
-    pub lists: HashMap<String, StudyConfig>,
+    pub lists: BTreeMap<String, StudyConfig>,
 }
