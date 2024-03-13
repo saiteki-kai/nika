@@ -11,7 +11,6 @@ use crate::config::{TAGS_BIN_PATH, WORDS_BIN_PATH};
 use crate::core::models::jmdict::{Tag, Word};
 
 use super::models::jmdict::Kanji;
-use super::words;
 
 pub type WordMap = HashMap<String, Word>;
 pub type TagMap = HashMap<Tag, String>;
@@ -47,7 +46,7 @@ impl Dictionary {
             .collect()
     }
 
-    /// Searches for words in the dictionary that match the given query.
+    /// Search for words in the dictionary that match the given query.
     ///
     /// Returns the `common` kanjis.
     pub fn search(&self, query: &str, common: Option<bool>) -> Vec<Word> {
