@@ -21,6 +21,7 @@ Main Features:
 - [ ] Word details (e.g. examples, links to online dictionaries)
 - [ ] Dictionary advanced search
 - [ ] Kanji
+- [ ] Shell completion
 
 Future Features:
 
@@ -57,16 +58,28 @@ chmod +x install.sh
 
 ## Usage
 
-Run nika:
+To get started with Nika, run the following command:
 
 ```bash
 nika --help
 ```
 
-Update the dictionary manually:
+The dictionary is automatically updated through a cron job every 3 days. However, if you want to update the dictionary manually, you can do so by running the following command:
 
 ```bash
 nika-updater
+```
+
+If you want to display daily words every time you open the terminal, add the following line to your shell configuration file (.zshrc, .bashrc, ...):
+
+```bash
+clear && nika study daily -s
+```
+
+You can use the less command to easily scroll through the daily words:
+
+```bash
+nika study daily | less
 ```
 
 ## License
