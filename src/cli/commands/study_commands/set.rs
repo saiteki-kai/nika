@@ -1,8 +1,10 @@
-use anyhow::{Context, Error, Result};
+use anyhow::Context;
+use anyhow::Error;
+use anyhow::Result;
 use clap::Args;
 
 use crate::cli::handlers::StudyCommandHandler;
-use crate::core::models::study_list::StudyConfig;
+use crate::core::models::study_list_config::StudyConfig;
 use crate::core::study_list_manager::StudyListManager;
 
 #[derive(Args)]

@@ -7,10 +7,11 @@ use anyhow::Error;
 use rand::seq::SliceRandom;
 use rayon::prelude::*;
 
-use crate::config::{TAGS_BIN_PATH, WORDS_BIN_PATH};
-use crate::core::models::jmdict::{Tag, Word};
-
 use super::models::jmdict::Kanji;
+use crate::config::TAGS_BIN_PATH;
+use crate::config::WORDS_BIN_PATH;
+use crate::core::models::jmdict::Tag;
+use crate::core::models::jmdict::Word;
 
 pub type WordMap = HashMap<String, Word>;
 pub type TagMap = HashMap<Tag, String>;

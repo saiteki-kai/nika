@@ -1,5 +1,6 @@
 use core::fmt;
-use std::{fs, path::PathBuf};
+use std::fs;
+use std::path::PathBuf;
 
 use once_cell::sync::Lazy;
 

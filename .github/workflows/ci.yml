@@ -25,10 +25,10 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
 
-      - name: Set up Rust (Stable)
+      - name: Set up Rust (Nightly)
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
-          toolchain: stable
+          toolchain: nightly
           components: clippy, rustfmt
 
       - name: Lint (Clippy)

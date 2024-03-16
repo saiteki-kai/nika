@@ -1,8 +1,10 @@
-use std::{fs, path::PathBuf};
+use std::fs;
+use std::path::PathBuf;
 
-use crate::core::models::study_list::StudyConfig;
-
-use super::study_list_stats::{Result, StudyListStats};
+use super::models::study_list_progress::StudyListProgress;
+use super::study_list_stats::Result;
+use super::study_list_stats::StudyListStats;
+use crate::core::models::study_list_config::StudyConfig;
 
 pub struct StudyListManager {
     dirpath: PathBuf,

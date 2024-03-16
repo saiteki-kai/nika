@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 
-use anyhow::{Error, Result};
+use anyhow::Error;
+use anyhow::Result;
 use clap::Args;
 
 use crate::cli::handlers::StudyCommandHandler;

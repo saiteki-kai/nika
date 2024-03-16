@@ -2,9 +2,12 @@
 extern crate confy;
 extern crate serde;
 
-use anyhow::{Context, Error};
-use serde_derive::{Deserialize, Serialize};
 use std::path::PathBuf;
+
+use anyhow::Context;
+use anyhow::Error;
+use serde_derive::Deserialize;
+use serde_derive::Serialize;
 
 use crate::core::models::link::Link;
 

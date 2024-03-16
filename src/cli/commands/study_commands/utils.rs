@@ -1,4 +1,6 @@
-use anyhow::{anyhow, Error, Result};
+use anyhow::anyhow;
+use anyhow::Error;
+use anyhow::Result;
 
 pub fn get_list_name(name: Option<String>, current: Option<String>) -> Result<String, Error> {
     let list_name: String = match &name {

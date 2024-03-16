@@ -1,9 +1,13 @@
-use std::{fs, io, path::PathBuf, result};
+use std::fs;
+use std::io;
+use std::path::PathBuf;
+use std::result;
 
 use serde_json::Error as SerdeError;
 use thiserror::Error;
 
-use crate::core::models::study_list::{StudyConfig, StudyListConfig};
+use crate::core::models::study_list_config::StudyConfig;
+use crate::core::models::study_list_config::StudyListConfig;
 
 #[derive(Error, Debug)]
 pub enum StudyListError {
@@ -100,17 +104,17 @@ impl StudyListStats {
 
 #[cfg(test)]
 mod tests {
-    use std::{collections::HashSet, fs, path::PathBuf};
+    use std::collections::HashSet;
+    use std::fs;
+    use std::path::PathBuf;
 
     use tempfile::TempDir;
     use test_case::test_case;
 
-    use crate::core::{
-        models::study_list::{StudyConfig, StudyListConfig},
-        study_list_stats::StudyListError,
-    };
-
     use super::StudyListStats;
+    use crate::core::models::study_list_config::StudyConfig;
+    use crate::core::models::study_list_config::StudyListConfig;
+    use crate::core::study_list_stats::StudyListError;
 
     fn setup() -> (PathBuf, StudyListStats) {
         let tmp_dir: TempDir = TempDir::new().unwrap();

@@ -1,12 +1,12 @@
-use std::{env, fs, path::PathBuf};
+use std::env;
+use std::fs;
+use std::path::PathBuf;
 
+use nika::core::models::study_list_config::StudyConfig;
+use nika::core::models::study_list_config::StudyListConfig;
+use nika::core::study_list_manager::StudyListManager;
+use nika::core::study_list_stats::StudyListError;
 use tempfile::tempdir;
-
-use nika::core::{
-    models::study_list::{StudyConfig, StudyListConfig},
-    study_list_manager::StudyListManager,
-    study_list_stats::StudyListError,
-};
 
 fn setup() -> (PathBuf, PathBuf, StudyListManager) {
     let tmp_dir = tempdir().unwrap();

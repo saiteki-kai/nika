@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
-use serde_derive::{Deserialize, Serialize};
+use serde_derive::Deserialize;
+use serde_derive::Serialize;
 
 pub type Tag = String;
 pub type Language3Letter = String;

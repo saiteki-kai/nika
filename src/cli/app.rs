@@ -1,13 +1,20 @@
-use anyhow::{Error, Result};
 use std::fs;
 use std::sync::OnceLock;
 
-use crate::config::{
-    app_cache_dir, app_config_dir, app_data_dir, APP_NAME, CONFIG_NAME, TAGS_BIN_PATH,
-    WORDS_BIN_PATH,
-};
+use anyhow::Error;
+use anyhow::Result;
+
+use crate::config::app_cache_dir;
+use crate::config::app_config_dir;
+use crate::config::app_data_dir;
+use crate::config::APP_NAME;
+use crate::config::CONFIG_NAME;
+use crate::config::TAGS_BIN_PATH;
+use crate::config::WORDS_BIN_PATH;
 use crate::core::config::ConfigService;
-use crate::core::dictionary::{Dictionary, TagMap, WordMap};
+use crate::core::dictionary::Dictionary;
+use crate::core::dictionary::TagMap;
+use crate::core::dictionary::WordMap;
 use crate::core::models::user_config::UserConfig;
 
 static CONFIG: OnceLock<UserConfig> = OnceLock::new();

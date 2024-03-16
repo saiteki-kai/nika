@@ -1,4 +1,5 @@
-use anyhow::{Error, Result};
+use anyhow::Error;
+use anyhow::Result;
 use clap::Args;
 
 use crate::cli::handlers::CommandHandler;

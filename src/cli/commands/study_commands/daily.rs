@@ -1,10 +1,16 @@
-use anyhow::{Error, Ok, Result};
+use anyhow::Error;
+use anyhow::Ok;
+use anyhow::Result;
 use clap::Args;
 
 use crate::cli::app::dictionary;
 use crate::cli::commands::study_commands::utils::get_list_name;
 use crate::cli::handlers::StudyCommandHandler;
-use crate::cli::utils::links::{generate_hyperlink, get_links};
+use crate::cli::utils::links::generate_hyperlink;
+use crate::cli::utils::links::get_links;
+use crate::core::models::jmdict::Kana;
+use crate::core::models::jmdict::Kanji;
+use crate::core::models::jmdict::Sense;
 use crate::core::models::jmdict::Word;
 use crate::core::models::link::Link;
 use crate::core::study_list_manager::StudyListManager;

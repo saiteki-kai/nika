@@ -1,5 +1,7 @@
-use anyhow::{Context, Error};
 use std::path::PathBuf;
+
+use anyhow::Context;
+use anyhow::Error;
 
 use super::models::user_config::UserConfig;
 

@@ -1,0 +1,25 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-docstring-first
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: check-yaml
+      - id: check-xml
+      - id: check-json
+
+  - repo: local
+    hooks:
+      - id: fmt
+        name: cargo-fmt
+        language: rust
+        entry: cargo +nightly fmt -- --check
+
+      - id: fmt
+        name: cargo-clippy
+        language: rust
+        entry: cargo +nightly clippy --all-targets -- -D warnings

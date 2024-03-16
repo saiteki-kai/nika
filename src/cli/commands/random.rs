@@ -1,9 +1,12 @@
-use anyhow::{Error, Result};
-use clap::{Args, ValueEnum};
+use anyhow::Error;
+use anyhow::Result;
+use clap::Args;
+use clap::ValueEnum;
 
 use crate::cli::app::dictionary;
 use crate::cli::handlers::CommandHandler;
-use crate::cli::utils::display::{print_word, DisplayMode};
+use crate::cli::utils::display::print_word;
+use crate::cli::utils::display::DisplayMode;
 
 #[derive(Clone, ValueEnum)]
 pub enum RandomOption {

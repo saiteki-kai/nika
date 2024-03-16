@@ -1,8 +1,14 @@
-use anyhow::{Error, Result};
-use clap::{Parser, Subcommand};
-
-use nika::cli::app::{init_config, init_dictionary, init_folders};
-use nika::cli::commands::{ProgressArgs, RandomArgs, SearchArgs, StudyArgs};
+use anyhow::Error;
+use anyhow::Result;
+use clap::Parser;
+use clap::Subcommand;
+use nika::cli::app::init_config;
+use nika::cli::app::init_dictionary;
+use nika::cli::app::init_folders;
+use nika::cli::commands::ProgressArgs;
+use nika::cli::commands::RandomArgs;
+use nika::cli::commands::SearchArgs;
+use nika::cli::commands::StudyArgs;
 use nika::cli::handlers::CommandHandler;
 
 #[derive(Parser)]
@@ -16,7 +22,7 @@ struct Cli {
 enum Command {
     /// Search words
     Search(SearchArgs),
-    ///
+    /// Study
     Study(StudyArgs),
     /// Show progress
     Progress(ProgressArgs),

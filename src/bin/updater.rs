@@ -3,22 +3,30 @@ use std::fs::File;
 use std::io::Read;
 use std::path::PathBuf;
 
-use anyhow::{anyhow, Context, Result};
+use anyhow::anyhow;
+use anyhow::Context;
+use anyhow::Result;
 use flate2::read::GzDecoder;
-use rayon::prelude::{IntoParallelIterator, ParallelIterator};
+use nika::config::*;
+use nika::core::models::jmdict::JMdict;
+use nika::core::models::jmdict::Word;
+use nika::core::models::kanjidic::Kanjidic;
+use rayon::prelude::IntoParallelIterator;
+use rayon::prelude::ParallelIterator;
 use reqwest::header::USER_AGENT;
 use serde::de::DeserializeOwned;
-use serde_derive::{Deserialize, Serialize};
+use serde_derive::Deserialize;
+use serde_derive::Serialize;
 use tar::Archive;
-use tracing::{debug, error, info};
-use tracing_subscriber::{
-    filter::LevelFilter, fmt, prelude::__tracing_subscriber_SubscriberExt, util::SubscriberInitExt,
-    Layer, Registry,
-};
-
-use nika::config::*;
-use nika::core::models::jmdict::{JMdict, Word};
-use nika::core::models::kanjidic::Kanjidic;
+use tracing::debug;
+use tracing::error;
+use tracing::info;
+use tracing_subscriber::filter::LevelFilter;
+use tracing_subscriber::fmt;
+use tracing_subscriber::prelude::__tracing_subscriber_SubscriberExt;
+use tracing_subscriber::util::SubscriberInitExt;
+use tracing_subscriber::Layer;
+use tracing_subscriber::Registry;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Release {

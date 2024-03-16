@@ -1,4 +1,5 @@
-use anyhow::{Error, Result};
+use anyhow::Error;
+use anyhow::Result;
 
 use crate::core::study_list_manager::StudyListManager;
 
