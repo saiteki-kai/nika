@@ -15,11 +15,17 @@ repos:
   - repo: local
     hooks:
       - id: fmt
-        name: cargo-fmt
-        language: rust
-        entry: cargo +nightly fmt -- --check
-
-      - id: fmt
-        name: cargo-clippy
-        language: rust
-        entry: cargo +nightly clippy --all-targets -- -D warnings
+        name: fmt
+        description: format
+        entry: cargo +nightly fmt
+        language: system
+        types: [rust]
+        args: ["--all", "--", "--check"]
+      - id: clippy
+        name: clippy
+        description: lint
+        entry: cargo clippy
+        language: system
+        types: [rust]
+        args: ["--all-targets", "--", "-D", "warnings"]
+        pass_filenames: false

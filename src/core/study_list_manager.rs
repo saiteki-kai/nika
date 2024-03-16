@@ -1,7 +1,6 @@
 use std::fs;
 use std::path::PathBuf;
 
-use super::models::study_list_progress::StudyListProgress;
 use super::study_list_stats::Result;
 use super::study_list_stats::StudyListStats;
 use crate::core::models::study_list_config::StudyConfig;

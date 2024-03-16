@@ -1,5 +1,7 @@
-use serde_derive::{Deserialize, Serialize};
 use std::collections::BTreeMap;
+
+use serde_derive::Deserialize;
+use serde_derive::Serialize;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, Copy)]
 pub struct StudyConfig {
