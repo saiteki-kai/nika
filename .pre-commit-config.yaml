@@ -12,6 +12,11 @@ repos:
       - id: check-xml
       - id: check-json
 
+  - repo: https://github.com/est31/cargo-udeps
+    rev: v0.1.47
+    hooks:
+      - id: udeps
+
   - repo: local
     hooks:
       - id: fmt
