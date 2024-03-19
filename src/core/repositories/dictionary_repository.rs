@@ -110,8 +110,8 @@ impl DictionaryRepository {
 
 #[cfg(test)]
 mod tests {
-    use std::env;
     use std::fs;
+    use std::path::Path;
 
     use rayon::prelude::IntoParallelIterator;
     use rayon::prelude::ParallelIterator;
@@ -120,11 +120,7 @@ mod tests {
     use crate::core::models::jmdict::JMdict;
 
     fn setup_repo() -> DictionaryRepository {
-        let fixtures_path = env::current_dir()
-            .unwrap()
-            .join("tests")
-            .join("fixtures")
-            .join("words.json");
+        let fixtures_path = Path::new("tests").join("fixtures").join("words.json");
 
         let words = fs::read_to_string(fixtures_path).unwrap();
         let data: JMdict = serde_json::from_str(&words).unwrap();

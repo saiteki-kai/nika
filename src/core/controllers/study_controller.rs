@@ -90,8 +90,8 @@ impl StudyController {
 
 #[cfg(test)]
 mod tests {
-    use std::env;
     use std::fs;
+    use std::path::Path;
     use std::path::PathBuf;
 
     use tempfile::tempdir;
@@ -118,11 +118,7 @@ mod tests {
             eprintln!("The only lists availables are 'list1' and 'list2'");
         }
 
-        let fixtures_path = env::current_dir()
-            .unwrap()
-            .join("tests")
-            .join("fixtures")
-            .join("study_list");
+        let fixtures_path = Path::new("tests").join("fixtures").join("study_list");
 
         fixtures_path.join(name)
     }
