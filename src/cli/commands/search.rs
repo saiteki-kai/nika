@@ -2,8 +2,9 @@ use anyhow::Error;
 use anyhow::Result;
 use clap::Args;
 
-use crate::cli::app::dictionary;
 use crate::cli::handlers::CommandHandler;
+use crate::core::controllers::search_controller::SearchController;
+use crate::core::repositories::dictionary_repository::DictionaryRepository;
 
 #[derive(Args)]
 pub struct SearchArgs {
@@ -16,11 +17,14 @@ pub struct SearchArgs {
 
 impl CommandHandler for SearchArgs {
     fn handle(&self) -> Result<(), Error> {
-        match self.query {
-            Some(ref _query) => {
-                let results = dictionary().search(_query, self.common);
+        let dictionary_repository = DictionaryRepository::new()?;
+        let controller = SearchController::new(dictionary_repository);
 
-                println!("{} Results found for {}\n", results.len(), _query);
+        match self.query {
+            Some(ref query) => {
+                let results = controller.search(query, self.common);
+
+                println!("{} Results found for {}\n", results.len(), query);
 
                 for res in &results {
                     println!("{:?}\n", res);

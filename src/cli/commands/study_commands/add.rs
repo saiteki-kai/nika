@@ -1,3 +1,4 @@
+use std::fs;
 use std::path::PathBuf;
 
 use anyhow::Error;
@@ -5,7 +6,8 @@ use anyhow::Result;
 use clap::Args;
 
 use crate::cli::handlers::StudyCommandHandler;
-use crate::core::study_list_manager::StudyListManager;
+use crate::core::controllers::study_controller::StudyController;
+use crate::core::models::study_list::StudyList;
 
 #[derive(Args)]
 pub struct AddArgs {
@@ -14,13 +16,23 @@ pub struct AddArgs {
 }
 
 impl StudyCommandHandler for AddArgs {
-    fn handle(&self, manager: &mut StudyListManager) -> Result<(), Error> {
-        let is_empty = manager.list().is_empty();
+    fn handle(&self, controller: &StudyController) -> Result<(), Error> {
+        // TODO: ask for overwrite when the name is already present!
+        // TODO: allow to pass the default value for the number of words per day
 
-        manager.add(&self.name, &self.file)?;
+        let items = fs::read_to_string(&self.file)?
+            .lines()
+            .map(String::from)
+            .collect::<Vec<String>>();
+
+        let study_list = StudyList::new(&self.name, items);
+
+        let is_empty = controller.lists()?.is_empty();
+
+        controller.add(study_list)?;
 
         if is_empty {
-            manager.select(&self.name)?;
+            controller.select(&self.name)?;
         }
 
         Ok(())

@@ -2,8 +2,6 @@ use anyhow::Error;
 use anyhow::Result;
 use clap::Parser;
 use clap::Subcommand;
-use nika::cli::app::init_config;
-use nika::cli::app::init_dictionary;
 use nika::cli::app::init_folders;
 use nika::cli::commands::ProgressArgs;
 use nika::cli::commands::RandomArgs;
@@ -31,10 +29,7 @@ enum Command {
 }
 
 fn run() -> Result<(), Error> {
-    init_config()?;
-
     init_folders()?;
-    init_dictionary();
 
     let cli = Cli::parse();
 

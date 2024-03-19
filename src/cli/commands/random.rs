@@ -3,10 +3,11 @@ use anyhow::Result;
 use clap::Args;
 use clap::ValueEnum;
 
-use crate::cli::app::dictionary;
 use crate::cli::handlers::CommandHandler;
 use crate::cli::utils::display::print_word;
 use crate::cli::utils::display::DisplayMode;
+use crate::core::controllers::random_controller::RandomController;
+use crate::core::repositories::dictionary_repository::DictionaryRepository;
 
 #[derive(Clone, ValueEnum)]
 pub enum RandomOption {
@@ -20,14 +21,17 @@ pub struct RandomArgs {
     #[arg(value_enum)]
     option: RandomOption,
     /// Number of words/kanji to generate
-    number: Option<usize>,
+    count: Option<usize>,
 }
 
 impl CommandHandler for RandomArgs {
     fn handle(&self) -> Result<(), Error> {
+        let dictionary_repository = DictionaryRepository::new()?;
+        let controller = RandomController::new(dictionary_repository);
+
         match self.option {
             RandomOption::Word => {
-                let words = dictionary().random_words(self.number.unwrap_or(1));
+                let words = controller.random_words(self.count.unwrap_or(1));
 
                 for word in words {
                     print_word(word, DisplayMode::Short);

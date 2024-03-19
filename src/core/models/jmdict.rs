@@ -23,14 +23,14 @@ pub struct Word {
     pub sense: Vec<Sense>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Kanji {
     pub common: bool,
     pub tags: Vec<Tag>,
     pub text: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Hash, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct Kana {
     pub applies_to_kanji: Vec<String>,

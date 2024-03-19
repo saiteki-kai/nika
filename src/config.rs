@@ -10,7 +10,6 @@ pub const CONFIG_NAME: &str = "config";
 pub static WORDS_BIN_PATH: Lazy<PathBuf> = Lazy::new(|| app_data_dir().join("jmdict-words.bin"));
 pub static TAGS_BIN_PATH: Lazy<PathBuf> = Lazy::new(|| app_data_dir().join("jmdict-tags.bin"));
 pub static KANJI_BIN_PATH: Lazy<PathBuf> = Lazy::new(|| app_data_dir().join("kanjidic.bin"));
-pub static STUDY_STATS_PATH: Lazy<PathBuf> = Lazy::new(|| app_data_dir().join("study_stats.json"));
 
 pub const DICTIONARY_RELEASE_URL: &str =
     "https://api.github.com/repos/scriptin/jmdict-simplified/releases/latest";

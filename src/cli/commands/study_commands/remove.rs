@@ -3,7 +3,7 @@ use anyhow::Result;
 use clap::Args;
 
 use crate::cli::handlers::StudyCommandHandler;
-use crate::core::study_list_manager::StudyListManager;
+use crate::core::controllers::study_controller::StudyController;
 
 #[derive(Args)]
 pub struct RemoveArgs {
@@ -11,8 +11,8 @@ pub struct RemoveArgs {
 }
 
 impl StudyCommandHandler for RemoveArgs {
-    fn handle(&self, manager: &mut StudyListManager) -> Result<(), Error> {
-        let result = manager.remove(&self.name);
+    fn handle(&self, controller: &StudyController) -> Result<(), Error> {
+        let result = controller.remove(&self.name);
 
         if result.is_ok() {
             println!("List '{}' has been removed", &self.name);

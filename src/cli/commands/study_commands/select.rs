@@ -4,7 +4,7 @@ use anyhow::Result;
 use clap::Args;
 
 use crate::cli::handlers::StudyCommandHandler;
-use crate::core::study_list_manager::StudyListManager;
+use crate::core::controllers::study_controller::StudyController;
 
 #[derive(Args)]
 pub struct SelectArgs {
@@ -12,8 +12,8 @@ pub struct SelectArgs {
 }
 
 impl StudyCommandHandler for SelectArgs {
-    fn handle(&self, manager: &mut StudyListManager) -> Result<(), Error> {
-        manager.select(&self.name)?;
+    fn handle(&self, controller: &StudyController) -> Result<(), Error> {
+        controller.select(&self.name)?;
         Ok(())
     }
 }
