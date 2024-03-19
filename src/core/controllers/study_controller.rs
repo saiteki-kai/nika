@@ -94,11 +94,16 @@ mod tests {
     use std::path::Path;
     use std::path::PathBuf;
 
+    use rayon::iter::IntoParallelIterator;
+    use rayon::iter::ParallelIterator;
     use tempfile::tempdir;
 
     use super::*;
     use crate::core::errors::ErrorKind;
     use crate::core::errors::StudyListError;
+    use crate::core::models::jmdict::JMdict;
+    use crate::core::repositories::dictionary_repository::TagMap;
+    use crate::core::repositories::dictionary_repository::WordMap;
 
     fn setup() -> StudyController {
         let tmp_dir = tempdir().unwrap();
@@ -106,9 +111,21 @@ mod tests {
         let lists_path = tmp_dir.into_path();
         let config_filepath = tempfile::NamedTempFile::new().unwrap().path().to_path_buf();
 
+        let words_path = Path::new("tests").join("fixtures").join("words.json");
+        let words = fs::read_to_string(words_path).unwrap();
+        let data: JMdict = serde_json::from_str(&words).unwrap();
+
+        let words: WordMap = data
+            .words
+            .into_par_iter()
+            .map(|word| (word.id.clone(), word))
+            .collect();
+
+        let tags: TagMap = data.tags;
+
         let list_repository = ListRepository::new(lists_path);
         let config_repository = ConfigRepository::new(config_filepath);
-        let dictionary_repository = DictionaryRepository::new().unwrap();
+        let dictionary_repository = DictionaryRepository::from(words, tags);
 
         StudyController::new(dictionary_repository, config_repository, list_repository)
     }
