@@ -92,3 +92,37 @@ impl ListRepository {
         self.dirpath.join(format!("{}.bin", name))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use tempfile::tempdir;
+
+    use super::*;
+
+    fn setup() -> (PathBuf, ListRepository) {
+        let tmp_path = tempdir().unwrap().into_path();
+        let list_repo = ListRepository::new(tmp_path.clone());
+
+        (tmp_path, list_repo)
+    }
+
+    #[test]
+    fn test_initialization() {
+        let (tmp_path, list_repo) = setup();
+
+        assert_eq!(tmp_path, list_repo.dirpath);
+
+        let lists = list_repo.get_lists().unwrap();
+        assert!(lists.is_empty());
+    }
+
+    #[test]
+    fn test_list_filepath() {
+        let (tmp_path, list_repo) = setup();
+
+        let name = "list1";
+        let filepath = list_repo.list_filepath(name);
+
+        assert_eq!(filepath, tmp_path.join(format!("{}.bin", name)));
+    }
+}
