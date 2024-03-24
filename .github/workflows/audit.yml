@@ -5,6 +5,7 @@ on:
     paths:
       - ".github/workflows/audit.yml"
       - "**/Cargo.toml"
+      - "**/Cargo.lock"
       - "**/audit.toml"
   workflow_dispatch:
   schedule:

@@ -1,3 +1,6 @@
-pub mod cli;
+pub mod app;
+pub mod commands;
 pub mod config;
-pub mod core;
+pub mod handlers;
+pub mod messages;
+mod utils;

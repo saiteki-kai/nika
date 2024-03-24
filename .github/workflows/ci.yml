@@ -32,7 +32,7 @@ jobs:
           components: clippy, rustfmt
 
       - name: Lint (Clippy)
-        run: cargo clippy --all-features --all-targets
+        run: cargo clippy --workspace --all-features --all-targets
 
       - name: Lint (Rustfmt)
         uses: actions-rust-lang/rustfmt@v1
@@ -62,7 +62,7 @@ jobs:
         uses: taiki-e/install-action@nextest
 
       - name: Test with nextest
-        run: cargo nextest run --all
+        run: cargo nextest run --workspace
 
   coverage:
     name: Coverage
@@ -82,7 +82,7 @@ jobs:
         uses: taiki-e/install-action@cargo-tarpaulin
 
       - name: Collect coverage data
-        run: cargo tarpaulin --engine llvm --locked --all-features --out Lcov
+        run: cargo tarpaulin --engine llvm --locked --workspace --all-targets --all-features --out Lcov
 
       - name: Upload coverage data to codecov
         uses: codecov/codecov-action@v4

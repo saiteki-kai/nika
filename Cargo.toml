@@ -1,13 +1,27 @@
 [package]
 name = "nika"
-version = "0.1.0"
-authors = ["Magazzù Giuseppe"]
-edition = "2021"
 description = "Japanese learning CLI"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+readme.workspace = true
+repository.workspace = true
+license.workspace = true
+default-run = "nika"
+
+[workspace]
+members = ["nika-core"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Magazzù Giuseppe"]
 readme = "README.md"
 repository = "https://github.com/saiteki-kai/nika"
-license = "MIT"
-default-run = "nika"
+license = "GPL-3.0"
+
+[workspace.dependencies]
+nika-core = { version = "*", path = "nika-core" }
 
 [dependencies]
 anyhow = "1.0.75"
@@ -15,6 +29,7 @@ bincode = "1.3.3"
 clap = { version = "4.4.6", features = ["derive"] }
 dirs = "5.0.1"
 flate2 = "1.0.28"
+nika-core = { workspace = true }
 once_cell = "1.18.0"
 rand = "0.8.5"
 rayon = "1.8.0"
@@ -37,7 +52,3 @@ path = "src/bin/main.rs"
 [[bin]]
 name = "nika-updater"
 path = "src/bin/updater.rs"
-
-[dev-dependencies]
-tempfile = "3.10.1"
-test-case = "3.3.1"

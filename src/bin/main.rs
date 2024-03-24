@@ -2,12 +2,12 @@ use anyhow::Error;
 use anyhow::Result;
 use clap::Parser;
 use clap::Subcommand;
-use nika::cli::app::init_folders;
-use nika::cli::commands::ProgressArgs;
-use nika::cli::commands::RandomArgs;
-use nika::cli::commands::SearchArgs;
-use nika::cli::commands::StudyArgs;
-use nika::cli::handlers::CommandHandler;
+use nika::app::init_folders;
+use nika::commands::ProgressArgs;
+use nika::commands::RandomArgs;
+use nika::commands::SearchArgs;
+use nika::commands::StudyArgs;
+use nika::handlers::CommandHandler;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = "<Long About>")]
