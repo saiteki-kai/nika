@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::fs;
 use std::fs::File;
 use std::io::Read;
 use std::path::PathBuf;
@@ -152,6 +153,7 @@ fn run() -> Result<()> {
     let (jmdict_url, kanjidic_url) = find_release_url()?;
 
     let dest_dir = app_cache_dir().join("data");
+    fs::create_dir_all(&dest_dir).expect("Failed to create data directory");
 
     info!("[2/4] Downloading JMDict data...");
     let jmdict_path = download_and_extract_tgz(&jmdict_url, &dest_dir)?;
