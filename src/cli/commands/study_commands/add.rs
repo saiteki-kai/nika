@@ -7,6 +7,8 @@ use clap::Args;
 
 use crate::cli::handlers::StudyCommandHandler;
 use crate::core::controllers::study_controller::StudyController;
+use crate::core::errors::ErrorKind;
+use crate::core::errors::StudyListError;
 use crate::core::models::study_list::StudyList;
 
 #[derive(Args)]
@@ -29,7 +31,21 @@ impl StudyCommandHandler for AddArgs {
 
         let is_empty = controller.lists()?.is_empty();
 
-        controller.add(study_list)?;
+        match controller.add(study_list) {
+            Ok(_) => Ok::<(), ErrorKind>(()),
+            Err(error) => {
+                return match error {
+                    ErrorKind::List(StudyListError::ListAlreadyExists) => {
+                        eprintln!("List '{}' already exists", &self.name);
+
+                        // TODO: ask for overwrite
+
+                        Ok(())
+                    }
+                    _ => Err(error.into()),
+                };
+            }
+        }?;
 
         if is_empty {
             controller.select(&self.name)?;

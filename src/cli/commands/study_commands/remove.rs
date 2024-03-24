@@ -15,7 +15,7 @@ impl StudyCommandHandler for RemoveArgs {
         let result = controller.remove(&self.name);
 
         if result.is_ok() {
-            println!("List '{}' has been removed", &self.name);
+            println!("List '{}' removed", &self.name);
         } else {
             eprintln!("List '{}' not found", &self.name);
         }

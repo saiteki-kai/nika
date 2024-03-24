@@ -3,6 +3,7 @@ use anyhow::Result;
 use clap::Args;
 
 use crate::cli::handlers::StudyCommandHandler;
+use crate::cli::messages::EMPTY_STUDY_LISTS;
 use crate::core::controllers::study_controller::StudyController;
 
 #[derive(Args)]
@@ -14,11 +15,15 @@ impl StudyCommandHandler for ListArgs {
         //       - current/total (perc %)
         //       - items per day
         //       - last study session
-        //
-        //       - if the list is empty -> show a message (add a list using the command
-        //         add)
 
-        for (i, item) in controller.lists()?.iter().enumerate() {
+        let lists = controller.lists()?;
+
+        if lists.is_empty() {
+            println!("{}", EMPTY_STUDY_LISTS);
+            return Ok(());
+        }
+
+        for (i, item) in lists.iter().enumerate() {
             let mut fmt_item = format!("{}. {}", i, item.name);
 
             if controller.selected_list()?.is_some_and(|c| c == item.name) {

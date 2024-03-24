@@ -14,6 +14,7 @@ pub struct SelectArgs {
 impl StudyCommandHandler for SelectArgs {
     fn handle(&self, controller: &StudyController) -> Result<(), Error> {
         controller.select(&self.name)?;
+        println!("List '{}' selected", &self.name);
         Ok(())
     }
 }

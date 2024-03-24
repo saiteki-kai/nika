@@ -1,4 +1,3 @@
-use anyhow::Context;
 use anyhow::Error;
 use anyhow::Result;
 use clap::Args;
@@ -16,9 +15,7 @@ pub struct SetArgs {
 
 impl StudyCommandHandler for SetArgs {
     fn handle(&self, controller: &StudyController) -> Result<(), Error> {
-        let list = controller
-            .list(&self.name)
-            .with_context(|| "List not found")?;
+        let list = controller.list(&self.name)?;
 
         if let Some(count) = self.items_per_day {
             let config = StudyConfig {

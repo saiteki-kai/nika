@@ -1,1 +1,1 @@
-pub mod study_controller;
+pub mod test_study_controller;
