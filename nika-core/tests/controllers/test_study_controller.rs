@@ -3,7 +3,7 @@ use std::path::Path;
 use std::path::PathBuf;
 
 use nika_core::controllers::study_controller::StudyController;
-use nika_core::errors::ErrorKind;
+use nika_core::errors::NikaError;
 use nika_core::errors::StudyListError;
 use nika_core::models::jmdict::JMdict;
 use nika_core::models::study_list::StudyList;
@@ -105,7 +105,7 @@ fn test_duplicated_add() {
     assert!(result1.is_ok());
     assert!(matches!(
         result2.unwrap_err(),
-        ErrorKind::List(StudyListError::ListAlreadyExists)
+        NikaError::List(StudyListError::ListAlreadyExists)
     ));
 
     let lists = controller.lists().unwrap();
@@ -143,7 +143,7 @@ fn test_invalid_remove() {
     let controller = setup();
 
     let err = controller.remove("invalid list").unwrap_err();
-    assert!(matches!(err, ErrorKind::List(StudyListError::ListNotFound)));
+    assert!(matches!(err, NikaError::List(StudyListError::ListNotFound)));
 }
 
 #[test]
@@ -168,7 +168,7 @@ fn test_invalid_select() {
     let controller = setup();
 
     let err = controller.select("invalid_list").unwrap_err();
-    assert!(matches!(err, ErrorKind::List(StudyListError::ListNotFound)));
+    assert!(matches!(err, NikaError::List(StudyListError::ListNotFound)));
 
     let result = controller.selected_list();
     assert!(result.unwrap().is_none());

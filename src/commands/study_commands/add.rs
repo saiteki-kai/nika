@@ -5,7 +5,7 @@ use anyhow::Error;
 use anyhow::Result;
 use clap::Args;
 use nika_core::controllers::study_controller::StudyController;
-use nika_core::errors::ErrorKind;
+use nika_core::errors::NikaError;
 use nika_core::errors::StudyListError;
 use nika_core::models::study_list::StudyList;
 
@@ -32,10 +32,10 @@ impl StudyCommandHandler for AddArgs {
         let is_empty = controller.lists()?.is_empty();
 
         match controller.add(study_list) {
-            Ok(_) => Ok::<(), ErrorKind>(()),
+            Ok(_) => Ok::<(), NikaError>(()),
             Err(error) => {
                 return match error {
-                    ErrorKind::List(StudyListError::ListAlreadyExists) => {
+                    NikaError::List(StudyListError::ListAlreadyExists) => {
                         eprintln!("List '{}' already exists", &self.name);
 
                         // TODO: ask for overwrite

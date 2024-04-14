@@ -3,7 +3,7 @@ use std::fs::DirEntry;
 use std::path::PathBuf;
 use std::result;
 
-use crate::errors::ErrorKind;
+use crate::errors::NikaError;
 use crate::errors::Result;
 use crate::errors::StudyListError;
 use crate::models::study_list::StudyConfig;
@@ -26,7 +26,7 @@ impl ListRepository {
         let filepath = self.list_filepath(&study_list.name);
 
         if filepath.exists() {
-            return Err(ErrorKind::List(StudyListError::ListAlreadyExists));
+            return Err(NikaError::List(StudyListError::ListAlreadyExists));
         }
 
         StudyList::save(&filepath, study_list)
@@ -36,7 +36,7 @@ impl ListRepository {
         let filepath = self.list_filepath(name);
 
         if !filepath.exists() {
-            return Err(ErrorKind::List(StudyListError::ListNotFound));
+            return Err(NikaError::List(StudyListError::ListNotFound));
         }
 
         fs::remove_file(filepath)?;
@@ -64,7 +64,7 @@ impl ListRepository {
         let filepath = self.list_filepath(name);
 
         if !filepath.exists() {
-            return Err(ErrorKind::List(StudyListError::ListNotFound));
+            return Err(NikaError::List(StudyListError::ListNotFound));
         }
 
         StudyList::load(&filepath)
@@ -74,7 +74,7 @@ impl ListRepository {
         let filepath = self.list_filepath(name);
 
         if !filepath.exists() {
-            return Err(ErrorKind::List(StudyListError::ListNotFound));
+            return Err(NikaError::List(StudyListError::ListNotFound));
         }
 
         let study_list = StudyList::load(&filepath)?;

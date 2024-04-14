@@ -7,8 +7,10 @@ use thiserror::Error;
 use toml::de::Error as TomlDeError;
 use toml::ser::Error as TomlSerError;
 
-#[derive(Error, Debug)]
-pub enum ErrorKind {
+pub type Result<T, E = NikaError> = result::Result<T, E>;
+
+#[derive(thiserror::Error, Debug)]
+pub enum NikaError {
     #[error("IO error: {0}")]
     Io(#[from] io::Error),
     #[error("Serde error: {0}")]
@@ -30,5 +32,3 @@ pub enum StudyListError {
     #[error("List already exists")]
     ListAlreadyExists,
 }
-
-pub type Result<T> = result::Result<T, ErrorKind>;

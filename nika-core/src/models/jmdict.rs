@@ -15,7 +15,7 @@ pub struct JMdict {
     pub words: Vec<Word>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Word {
     pub id: String,
     pub kana: Vec<Kana>,
@@ -39,7 +39,7 @@ pub struct Kana {
     pub text: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Hash, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct Sense {
     // pub antonym: Vec<Xref>,
@@ -55,7 +55,7 @@ pub struct Sense {
     // pub related: Vec<Xref>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Clone, Hash, PartialEq, Eq)]
 #[serde(untagged)]
 pub enum Xref {
     /// (kanji, kana, sense_index)
@@ -68,7 +68,7 @@ pub enum Xref {
     Word((String,)),
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Hash, PartialEq, Eq)]
 pub struct LanguageSource {
     pub full: bool,
     pub lang: Language3Letter,
@@ -76,7 +76,7 @@ pub struct LanguageSource {
     pub wasei: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Hash, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub enum Gender {
     Masculine,
@@ -84,7 +84,7 @@ pub enum Gender {
     Neuter,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Hash, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub enum GlossType {
     Literal,
@@ -93,7 +93,7 @@ pub enum GlossType {
     Trademark,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Gloss {
     pub gender: Option<Gender>,
     pub lang: Language3Letter,

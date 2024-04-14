@@ -13,7 +13,6 @@ use nika_core::importer::matching::Matcher;
 use nika_core::importer::query::Query;
 use nika_core::models::jmdict::Word;
 use nika_core::repositories::dictionary_repository::WordMap;
-use rayon::iter::IntoParallelRefIterator;
 use rayon::prelude::*;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;

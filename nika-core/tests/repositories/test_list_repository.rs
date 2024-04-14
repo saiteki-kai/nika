@@ -2,7 +2,7 @@ use std::collections::HashSet;
 use std::fs;
 use std::path::PathBuf;
 
-use nika_core::errors::ErrorKind;
+use nika_core::errors::NikaError;
 use nika_core::errors::StudyListError;
 use nika_core::models::study_list::StudyConfig;
 use nika_core::models::study_list::StudyList;
@@ -115,7 +115,7 @@ fn test_remove_list() {
 
     assert!(matches!(
         result.unwrap_err(),
-        ErrorKind::List(StudyListError::ListNotFound)
+        NikaError::List(StudyListError::ListNotFound)
     ));
 
     let lists = list_repo.get_lists().unwrap();
@@ -133,6 +133,6 @@ fn test_file_not_found() {
 
     assert!(matches!(
         list_repo.get_lists().unwrap_err(),
-        ErrorKind::Io(_),
+        NikaError::Io(_),
     ));
 }
