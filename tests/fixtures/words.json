@@ -1,0 +1,289 @@
+{
+  "version": "",
+  "dictDate": "",
+  "tags": {},
+  "words": [
+    {
+      "id": "1358280",
+      "kanji": [
+        { "common": true, "text": "食べる", "tags": [] },
+        { "common": false, "text": "喰べる", "tags": ["iK"] }
+      ],
+      "kana": [
+        {
+          "common": true,
+          "text": "たべる",
+          "tags": [],
+          "appliesToKanji": ["*"]
+        }
+      ],
+      "sense": [
+        {
+          "partOfSpeech": ["v1", "vt"],
+          "appliesToKanji": ["*"],
+          "appliesToKana": ["*"],
+          "related": [],
+          "antonym": [],
+          "field": [],
+          "dialect": [],
+          "misc": [],
+          "info": [],
+          "languageSource": [],
+          "gloss": [
+            { "lang": "eng", "gender": null, "type": null, "text": "to eat" }
+          ]
+        },
+        {
+          "partOfSpeech": ["v1", "vt"],
+          "appliesToKanji": ["*"],
+          "appliesToKana": ["*"],
+          "related": [],
+          "antonym": [],
+          "field": [],
+          "dialect": [],
+          "misc": [],
+          "info": [],
+          "languageSource": [],
+          "gloss": [
+            {
+              "lang": "eng",
+              "gender": null,
+              "type": null,
+              "text": "to live on (e.g. a salary)"
+            },
+            {
+              "lang": "eng",
+              "gender": null,
+              "type": null,
+              "text": "to live off"
+            },
+            {
+              "lang": "eng",
+              "gender": null,
+              "type": null,
+              "text": "to subsist on"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1501350",
+      "kanji": [{ "common": true, "text": "複雑", "tags": [] }],
+      "kana": [
+        {
+          "common": true,
+          "text": "ふくざつ",
+          "tags": [],
+          "appliesToKanji": ["*"]
+        }
+      ],
+      "sense": [
+        {
+          "partOfSpeech": ["adj-na", "n"],
+          "appliesToKanji": ["*"],
+          "appliesToKana": ["*"],
+          "related": [],
+          "antonym": [["単純"]],
+          "field": [],
+          "dialect": [],
+          "misc": [],
+          "info": [],
+          "languageSource": [],
+          "gloss": [
+            { "lang": "eng", "gender": null, "type": null, "text": "complex" },
+            {
+              "lang": "eng",
+              "gender": null,
+              "type": null,
+              "text": "complicated"
+            },
+            {
+              "lang": "eng",
+              "gender": null,
+              "type": null,
+              "text": "intricate"
+            },
+            {
+              "lang": "eng",
+              "gender": null,
+              "type": null,
+              "text": "mixed (feelings)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1582710",
+      "kanji": [{ "common": true, "text": "日本", "tags": [] }],
+      "kana": [
+        {
+          "common": true,
+          "text": "にほん",
+          "tags": [],
+          "appliesToKanji": ["*"]
+        },
+        {
+          "common": false,
+          "text": "にっぽん",
+          "tags": [],
+          "appliesToKanji": ["*"]
+        }
+      ],
+      "sense": [
+        {
+          "partOfSpeech": ["n"],
+          "appliesToKanji": ["*"],
+          "appliesToKana": ["*"],
+          "related": [],
+          "antonym": [],
+          "field": [],
+          "dialect": [],
+          "misc": [],
+          "info": [],
+          "languageSource": [],
+          "gloss": [
+            { "lang": "eng", "gender": null, "type": null, "text": "Japan" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1318720",
+      "kanji": [{ "common": true, "text": "自由", "tags": [] }],
+      "kana": [
+        {
+          "common": true,
+          "text": "じゆう",
+          "tags": [],
+          "appliesToKanji": ["*"]
+        }
+      ],
+      "sense": [
+        {
+          "partOfSpeech": ["n", "adj-na"],
+          "appliesToKanji": ["*"],
+          "appliesToKana": ["*"],
+          "related": [],
+          "antonym": [],
+          "field": [],
+          "dialect": [],
+          "misc": [],
+          "info": [],
+          "languageSource": [],
+          "gloss": [
+            { "lang": "eng", "gender": null, "type": null, "text": "freedom" },
+            { "lang": "eng", "gender": null, "type": null, "text": "liberty" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1008590",
+      "kanji": [],
+      "kana": [
+        {
+          "common": true,
+          "text": "として",
+          "tags": [],
+          "appliesToKanji": ["*"]
+        }
+      ],
+      "sense": [
+        {
+          "partOfSpeech": ["exp"],
+          "appliesToKanji": ["*"],
+          "appliesToKana": ["*"],
+          "related": [],
+          "antonym": [],
+          "field": [],
+          "dialect": [],
+          "misc": [],
+          "info": [],
+          "languageSource": [],
+          "gloss": [
+            {
+              "lang": "eng",
+              "gender": null,
+              "type": null,
+              "text": "as (i.e. in the role of)"
+            },
+            {
+              "lang": "eng",
+              "gender": null,
+              "type": null,
+              "text": "for (i.e. from the viewpoint of)"
+            }
+          ]
+        },
+        {
+          "partOfSpeech": ["exp"],
+          "appliesToKanji": ["*"],
+          "appliesToKana": ["*"],
+          "related": [],
+          "antonym": [],
+          "field": [],
+          "dialect": [],
+          "misc": [],
+          "info": [],
+          "languageSource": [],
+          "gloss": [
+            {
+              "lang": "eng",
+              "gender": null,
+              "type": null,
+              "text": "apart from... (used to change the topic)"
+            }
+          ]
+        },
+        {
+          "partOfSpeech": ["exp"],
+          "appliesToKanji": ["*"],
+          "appliesToKana": ["*"],
+          "related": [],
+          "antonym": [],
+          "field": [],
+          "dialect": [],
+          "misc": [],
+          "info": ["before a negative form"],
+          "languageSource": [],
+          "gloss": [
+            {
+              "lang": "eng",
+              "gender": null,
+              "type": null,
+              "text": "even (e.g. \"not even a single person\")"
+            }
+          ]
+        },
+        {
+          "partOfSpeech": ["exp"],
+          "appliesToKanji": ["*"],
+          "appliesToKana": ["*"],
+          "related": [["とする", 1]],
+          "antonym": [],
+          "field": [],
+          "dialect": [],
+          "misc": [],
+          "info": ["after a volitional form"],
+          "languageSource": [],
+          "gloss": [
+            {
+              "lang": "eng",
+              "gender": null,
+              "type": null,
+              "text": "thinking that..."
+            },
+            {
+              "lang": "eng",
+              "gender": null,
+              "type": null,
+              "text": "trying to..."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
