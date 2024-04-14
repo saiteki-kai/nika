@@ -1,11 +1,8 @@
 use anyhow::Error;
 use anyhow::Result;
-use nika_core::controllers::study_controller::StudyController;
+
+use crate::context::Context;
 
 pub trait CommandHandler {
-    fn handle(&self) -> Result<(), Error>;
-}
-
-pub trait StudyCommandHandler {
-    fn handle(&self, controller: &StudyController) -> Result<(), Error>;
+    fn handle(&self, ctx: &Context) -> Result<(), Error>;
 }
