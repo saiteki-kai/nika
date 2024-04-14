@@ -3,6 +3,8 @@ use std::fs;
 use std::fs::File;
 use std::io::Read;
 use std::path::PathBuf;
+use std::process::Command;
+use std::process::Stdio;
 
 use anyhow::anyhow;
 use anyhow::Context;
@@ -122,17 +124,18 @@ fn parse_json<T: DeserializeOwned>(path: &PathBuf) -> Result<T> {
     Ok(json_data)
 }
 
-fn generate_bincode_kanjidic(data: Kanjidic) -> Result<()> {
+fn generate_bincode_kanjidic(data: &Kanjidic) -> Result<()> {
     let file = File::create(KANJI_BIN_PATH.as_path())?;
     let mut writer = std::io::BufWriter::new(file);
-    bincode::serialize_into(&mut writer, &data).with_context(|| "Failed to serialize kanji")?;
+    bincode::serialize_into(&mut writer, data).with_context(|| "Failed to serialize kanji")?;
 
     Ok(())
 }
 
-fn generate_bincode_jmdict(data: JMdict) -> Result<()> {
+fn generate_bincode_jmdict(data: &JMdict) -> Result<()> {
     let words: HashMap<String, Word> = data
         .words
+        .clone()
         .into_par_iter()
         .map(|word| (word.id.clone(), word))
         .collect();
@@ -148,30 +151,76 @@ fn generate_bincode_jmdict(data: JMdict) -> Result<()> {
     Ok(())
 }
 
+fn extract_context_words(words: &JMdict) -> Result<()> {
+    let tmp_senses_path = app_cache_dir().join("senses.json");
+    let out_senses_path = app_data_dir().join("senses.json");
+
+    if !out_senses_path.exists() {
+        let mut words_senses = HashMap::new();
+
+        for word in &words.words {
+            let mut senses = vec![];
+
+            for sense in &word.sense {
+                let glosses = sense
+                    .gloss
+                    .iter()
+                    .map(|gloss| gloss.text.clone())
+                    .collect::<Vec<String>>();
+
+                senses.push(glosses);
+            }
+
+            words_senses.insert(&word.id, senses);
+        }
+
+        let words_senses_json = serde_json::to_string(&words_senses)
+            .with_context(|| "Failed to serialize words senses")?;
+        fs::write(&tmp_senses_path, words_senses_json)
+            .with_context(|| "Failed to save temporary words senses")?;
+
+        Command::new("extract_words")
+            .arg("-i")
+            .arg(tmp_senses_path)
+            .arg("-o")
+            .arg(out_senses_path)
+            .stdout(Stdio::piped())
+            .spawn()
+            .expect("Failed to execute process")
+            .wait()
+            .with_context(|| "Failed to extract context words")?;
+    }
+
+    Ok(())
+}
+
 fn run() -> Result<()> {
-    info!("[1/4] Finding the latest release...");
+    info!("[1/5] Finding the latest release...");
     let (jmdict_url, kanjidic_url) = find_release_url()?;
 
     let dest_dir = app_cache_dir().join("data");
     fs::create_dir_all(&dest_dir).expect("Failed to create data directory");
 
-    info!("[2/4] Downloading JMDict data...");
+    info!("[2/5] Downloading JMDict data...");
     let jmdict_path = download_and_extract_tgz(&jmdict_url, &dest_dir)?;
 
-    info!("[2/4] Downloading Kanjidic2 data...");
+    info!("[2/5] Downloading Kanjidic2 data...");
     let kanjidic_path = download_and_extract_tgz(&kanjidic_url, &dest_dir)?;
 
-    info!("[3/4] Parsing JMDict data...");
+    info!("[3/5] Parsing JMDict data...");
     let jmdict_data = parse_json::<JMdict>(&jmdict_path)?;
 
-    info!("[3/4] Parsing Kanjidic2 data...");
+    info!("[3/5] Parsing Kanjidic2 data...");
     let kanjidic_data = parse_json::<Kanjidic>(&kanjidic_path)?;
 
-    info!("[4/4] Generating JMDict binary...");
-    generate_bincode_jmdict(jmdict_data)?;
+    info!("[4/5] Generating JMDict binary...");
+    generate_bincode_jmdict(&jmdict_data)?;
 
-    info!("[4/4] Generating Kanjidic2 binary...");
-    generate_bincode_kanjidic(kanjidic_data)?;
+    info!("[4/5] Generating Kanjidic2 binary...");
+    generate_bincode_kanjidic(&kanjidic_data)?;
+
+    info!("[5/5] Extracting context words...");
+    extract_context_words(&jmdict_data)?;
 
     info!("Update completed successfully.");
 
