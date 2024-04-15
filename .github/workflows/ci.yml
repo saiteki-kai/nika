@@ -32,7 +32,7 @@ jobs:
           components: clippy, rustfmt
 
       - name: Lint (Clippy)
-        run: cargo clippy --workspace --all-features --all-targets
+        run: cargo clippy --workspace --all-features --all-targets --no-deps -- -D warnings
 
       - name: Lint (Rustfmt)
         uses: actions-rust-lang/rustfmt@v1

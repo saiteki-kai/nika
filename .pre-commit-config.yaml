@@ -38,6 +38,7 @@ repos:
             "--workspace",
             "--all-targets",
             "--all-features",
+            "--no-deps",
             "--",
             "-D",
             "warnings",
