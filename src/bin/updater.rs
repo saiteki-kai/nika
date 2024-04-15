@@ -6,7 +6,7 @@ use std::path::PathBuf;
 use std::process::Command;
 use std::process::Stdio;
 
-use anyhow::anyhow;
+use anyhow::bail;
 use anyhow::Context;
 use anyhow::Result;
 use flate2::read::GzDecoder;
@@ -77,10 +77,11 @@ fn find_release_url() -> Result<(String, String)> {
                 kanjidic.browser_download_url.clone(),
             ));
         }
-        return Err(anyhow!("Empty resources"));
+
+        bail!("Empty resources");
     }
 
-    Err(anyhow!("URLs not found"))
+    bail!("URLs not found")
 }
 
 fn download_and_extract_tgz(url: &str, destination_path: &PathBuf) -> Result<PathBuf> {
@@ -110,7 +111,7 @@ fn download_and_extract_tgz(url: &str, destination_path: &PathBuf) -> Result<Pat
         }
     }
 
-    Err(anyhow!("Could not extract the data"))
+    bail!("Could not extract the data")
 }
 
 fn parse_json<T: DeserializeOwned>(path: &PathBuf) -> Result<T> {
