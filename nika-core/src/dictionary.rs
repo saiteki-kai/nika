@@ -96,9 +96,6 @@ mod tests {
     use std::fs;
     use std::path::Path;
 
-    use rayon::prelude::IntoParallelIterator;
-    use rayon::prelude::ParallelIterator;
-
     use super::*;
     use crate::models::jmdict::JMdict;
 

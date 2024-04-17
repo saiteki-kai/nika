@@ -110,5 +110,11 @@ fn main() -> Result<(), Box<dyn Error>> {
     let conflict_path = app_cache_dir().join("conflicts.json");
     fs::write(conflict_path, serde_json::to_string(&match_results)?)?;
 
+    let _list = match_results
+        .matches
+        .iter()
+        .map(|id| StudyItem::from(id.clone()))
+        .collect::<Vec<StudyItem>>();
+
     Ok(())
 }

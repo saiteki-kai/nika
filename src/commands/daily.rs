@@ -9,6 +9,7 @@ use nika_core::models::study_list::StudyItem;
 use nika_core::models::study_list::StudyList;
 
 use crate::context::GlobalContext;
+use crate::error::CliResult;
 use crate::handlers::CommandHandler;
 
 #[derive(Subcommand)]
@@ -26,7 +27,7 @@ pub struct DailyArgs {
 }
 
 impl CommandHandler for DailyArgs {
-    fn handle(&self, ctx: &mut GlobalContext) -> Result<(), anyhow::Error> {
+    fn handle(&self, ctx: &GlobalContext) -> CliResult<()> {
         match &self.commands {
             DailyCommand::Import(args) => handle_import(ctx, args),
             DailyCommand::List(args) => handle_list(ctx, args),
@@ -41,7 +42,7 @@ struct ImportArgs {
     file: PathBuf,
 }
 
-fn handle_import(ctx: &mut GlobalContext, args: &ImportArgs) -> Result<(), anyhow::Error> {
+fn handle_import(ctx: &GlobalContext, args: &ImportArgs) -> CliResult<()> {
     let content = fs::read_to_string(args.file.as_path())?;
 
     let data: HashSet<String> = content.lines().map(|s| s.to_string()).collect();
@@ -49,7 +50,11 @@ fn handle_import(ctx: &mut GlobalContext, args: &ImportArgs) -> Result<(), anyho
 
     let list = StudyList::new(items);
 
-    ctx.db_mut()?.insert_study_list(list)?;
+    let db = ctx.db()?;
+
+    for item in list.items {
+        db.insert_study_item(item)?;
+    }
 
     Ok(())
 }
@@ -69,11 +74,11 @@ pub struct ListArgs {
     status: Option<String>,
 }
 
-fn handle_list(ctx: &mut GlobalContext, args: &ListArgs) -> Result<(), anyhow::Error> {
+fn handle_list(ctx: &GlobalContext, args: &ListArgs) -> CliResult<()> {
     let count = args.count.unwrap_or(0);
 
     let list = ctx
-        .db_mut()?
+        .db()?
         .get_study_list()
         .with_context(|| "failed to get study list")?;
 

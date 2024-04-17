@@ -4,6 +4,7 @@ use clap::Args;
 use clap::Subcommand;
 
 use crate::context::GlobalContext;
+use crate::error::CliResult;
 use crate::handlers::CommandHandler;
 
 #[derive(Subcommand)]
@@ -25,7 +26,7 @@ pub struct DiscoveryArgs {
 }
 
 impl CommandHandler for DiscoveryArgs {
-    fn handle(&self, ctx: &mut GlobalContext) -> Result<(), anyhow::Error> {
+    fn handle(&self, ctx: &GlobalContext) -> CliResult<()> {
         match &self.commands {
             DiscoveryCommand::List(args) => handle_list(ctx, args),
             DiscoveryCommand::Add(args) => handle_add(ctx, args),
@@ -42,7 +43,7 @@ struct ImportArgs {
     file: PathBuf,
 }
 
-fn handle_import(_ctx: &mut GlobalContext, _args: &ImportArgs) -> Result<(), anyhow::Error> {
+fn handle_import(_ctx: &GlobalContext, _args: &ImportArgs) -> CliResult<()> {
     println!("not implemented yet");
     Ok(())
 }
@@ -62,7 +63,7 @@ struct ListArgs {
     status: Option<String>,
 }
 
-fn handle_list(_ctx: &mut GlobalContext, _args: &ListArgs) -> Result<(), anyhow::Error> {
+fn handle_list(_ctx: &GlobalContext, _args: &ListArgs) -> CliResult<()> {
     println!("not implemented yet");
     Ok(())
 }
@@ -77,7 +78,7 @@ struct AddArgs {
     meaning: Option<String>,
 }
 
-fn handle_add(_ctx: &mut GlobalContext, _args: &AddArgs) -> Result<(), anyhow::Error> {
+fn handle_add(_ctx: &GlobalContext, _args: &AddArgs) -> CliResult<()> {
     println!("not implemented yet");
     Ok(())
 }
@@ -92,7 +93,7 @@ struct RemoveArgs {
     meaning: Option<String>,
 }
 
-fn handle_remove(_ctx: &mut GlobalContext, _args: &RemoveArgs) -> Result<(), anyhow::Error> {
+fn handle_remove(_ctx: &GlobalContext, _args: &RemoveArgs) -> CliResult<()> {
     println!("not implemented yet");
     Ok(())
 }

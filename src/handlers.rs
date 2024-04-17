@@ -1,8 +1,6 @@
-use anyhow::Error;
-use anyhow::Result;
-
 use crate::context::GlobalContext;
+use crate::error::CliResult;
 
 pub trait CommandHandler {
-    fn handle(&self, ctx: &mut GlobalContext) -> Result<(), Error>;
+    fn handle(&self, ctx: &GlobalContext) -> CliResult<()>;
 }

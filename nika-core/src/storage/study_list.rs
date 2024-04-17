@@ -2,7 +2,6 @@ use std::result;
 
 use rusqlite::params;
 use rusqlite::Row;
-use rusqlite::Transaction;
 
 use super::sqlite::Storage;
 use crate::errors::Result;
@@ -21,7 +20,7 @@ fn row_to_study_item(row: &Row) -> result::Result<StudyItem, rusqlite::Error> {
 }
 
 impl Storage {
-    pub fn get_study_list(&mut self) -> Result<StudyList> {
+    pub fn get_study_list(&self) -> Result<StudyList> {
         let items = self
             .db
             .prepare("SELECT word_id, status, updated_at FROM study_list")?
@@ -31,23 +30,24 @@ impl Storage {
         Ok(StudyList::new(items))
     }
 
-    pub fn insert_study_list(&mut self, list: StudyList) -> Result<()> {
-        let mut tx = self.db.transaction()?;
-        Self::insert_many(&mut tx, list.items)?;
-        tx.commit()?;
+    // pub fn insert_study_list(&self, list: StudyList) -> Result<()> {
+    //     let mut tx = self.db.transaction()?;
+    //     Self::insert_many(&mut tx, list.items)?;
+    //     tx.commit()?;
+
+    //     Ok(())
+    // }
+
+    pub fn insert_study_item(&self, item: StudyItem) -> Result<()> {
+        let mut stmt = self.db.prepare_cached(
+            "INSERT INTO study_list (word_id, status, updated_at) VALUES (?1, ?2, ?3)",
+        )?;
+        stmt.insert(params![item.word_id, item.status, item.updated_at])?;
 
         Ok(())
     }
 
-    pub fn insert_study_item(&mut self, item: StudyItem) -> Result<()> {
-        self.db
-            .prepare("INSERT INTO study_list (word_id, status, updated_at) VALUES (?1, ?2, ?3)")?
-            .insert(params![item.word_id, item.status, item.updated_at])?;
-
-        Ok(())
-    }
-
-    pub fn update_study_item(&mut self, item: StudyItem) -> Result<()> {
+    pub fn update_study_item(&self, item: StudyItem) -> Result<()> {
         self.db
             .prepare("UPDATE study_list SET status = ?2, updated_at = ?3 WHERE word_id = ?1")?
             .execute(params![item.word_id, item.status, item.updated_at])?;
@@ -55,17 +55,17 @@ impl Storage {
         Ok(())
     }
 
-    fn insert_many(tx: &mut Transaction, items: Vec<StudyItem>) -> Result<()> {
-        let mut stmt = tx.prepare_cached(
-            "INSERT INTO study_list (word_id, status, updated_at) VALUES (?1, ?2, ?3)",
-        )?;
+    // fn insert_many(tx: &mut Transaction, items: Vec<StudyItem>) -> Result<()> {
+    //     let mut stmt = tx.prepare_cached(
+    //         "INSERT INTO study_list (word_id, status, updated_at) VALUES (?1, ?2,
+    // ?3)",     )?;
 
-        for item in items {
-            stmt.insert(params![item.word_id, item.status, item.updated_at])?;
-        }
+    //     for item in items {
+    //         stmt.insert(params![item.word_id, item.status, item.updated_at])?;
+    //     }
 
-        Ok(())
-    }
+    //     Ok(())
+    // }
 }
 
 #[cfg(test)]
@@ -76,7 +76,7 @@ mod tests {
 
     #[test]
     fn test() {
-        let mut storage = Storage::open_in_memory().expect("failed to open storage");
+        let storage = Storage::open_in_memory().expect("failed to open storage");
 
         let item1 = StudyItem {
             word_id: "1".to_string(),
@@ -92,8 +92,12 @@ mod tests {
 
         let list = StudyList::new(vec![item1.clone(), item2.clone()]);
 
-        let result = storage.insert_study_list(list);
-        assert!(result.is_ok());
+        for item in list.items {
+            let result = storage.insert_study_item(item);
+            assert!(result.is_ok());
+        }
+        // let result = storage.insert_study_list(list);
+        // assert!(result.is_ok());
 
         let result = storage.get_study_list();
         assert!(result.is_ok());

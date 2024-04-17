@@ -41,19 +41,15 @@ pub fn run() -> Result<(), Error> {
     init_folders()?;
 
     let dirs = ProjectDirs::from("", "", "nika").with_context(|| "failed to get project dirs")?;
-    let mut ctx = GlobalContext::new(dirs).with_context(|| "failed to create global context")?;
-
-    println!("{:#?}", ctx.prefs()?);
-    ctx.prefs()?.save()?;
-    println!("{:#?}", ctx.prefs()?);
+    let ctx = GlobalContext::new(dirs).with_context(|| "failed to create global context")?;
 
     let cli = Cli::parse();
 
     match &cli.commands {
-        Command::Study(args) => args.handle(&mut ctx),
-        Command::Daily(args) => args.handle(&mut ctx),
-        Command::Discovery(args) => args.handle(&mut ctx),
-        Command::Dictionary(args) => args.handle(&mut ctx),
+        Command::Study(args) => args.handle(&ctx),
+        Command::Daily(args) => args.handle(&ctx),
+        Command::Discovery(args) => args.handle(&ctx),
+        Command::Dictionary(args) => args.handle(&ctx),
     }
 }
 

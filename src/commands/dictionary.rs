@@ -2,6 +2,7 @@ use clap::Args;
 use clap::Subcommand;
 
 use crate::context::GlobalContext;
+use crate::error::CliResult;
 use crate::handlers::CommandHandler;
 use crate::utils::display::print_word;
 use crate::utils::display::DisplayMode;
@@ -21,7 +22,7 @@ pub struct DictionaryArgs {
 }
 
 impl CommandHandler for DictionaryArgs {
-    fn handle(&self, ctx: &mut GlobalContext) -> Result<(), anyhow::Error> {
+    fn handle(&self, ctx: &GlobalContext) -> CliResult<()> {
         match &self.commands {
             DictionaryCommand::Search(args) => handle_search(ctx, args),
             DictionaryCommand::Random(args) => handle_random(ctx, args),
@@ -47,7 +48,7 @@ struct SearchArgs {
     verbose: bool,
 }
 
-fn handle_search(_ctx: &mut GlobalContext, _args: &SearchArgs) -> Result<(), anyhow::Error> {
+fn handle_search(_ctx: &GlobalContext, _args: &SearchArgs) -> CliResult<()> {
     println!("not implemented yet");
     Ok(())
 }
@@ -71,7 +72,7 @@ struct RandomArgs {
     verbose: bool,
 }
 
-fn handle_random(ctx: &GlobalContext, args: &RandomArgs) -> Result<(), anyhow::Error> {
+fn handle_random(ctx: &GlobalContext, args: &RandomArgs) -> CliResult<()> {
     let words = ctx.dictionary()?.random_words(args.count);
 
     for word in words {
