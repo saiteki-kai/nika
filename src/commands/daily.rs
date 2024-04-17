@@ -1,9 +1,14 @@
+use std::collections::HashSet;
+use std::fs;
 use std::path::PathBuf;
 
+use anyhow::Context;
 use clap::Args;
 use clap::Subcommand;
+use nika_core::models::study_list::StudyItem;
+use nika_core::models::study_list::StudyList;
 
-use crate::context::Context;
+use crate::context::GlobalContext;
 use crate::handlers::CommandHandler;
 
 #[derive(Subcommand)]
@@ -21,7 +26,7 @@ pub struct DailyArgs {
 }
 
 impl CommandHandler for DailyArgs {
-    fn handle(&self, ctx: &Context) -> Result<(), anyhow::Error> {
+    fn handle(&self, ctx: &mut GlobalContext) -> Result<(), anyhow::Error> {
         match &self.commands {
             DailyCommand::Import(args) => handle_import(ctx, args),
             DailyCommand::List(args) => handle_list(ctx, args),
@@ -36,8 +41,16 @@ struct ImportArgs {
     file: PathBuf,
 }
 
-fn handle_import(_ctx: &Context, _args: &ImportArgs) -> Result<(), anyhow::Error> {
-    println!("not implemented yet");
+fn handle_import(ctx: &mut GlobalContext, args: &ImportArgs) -> Result<(), anyhow::Error> {
+    let content = fs::read_to_string(args.file.as_path())?;
+
+    let data: HashSet<String> = content.lines().map(|s| s.to_string()).collect();
+    let items: Vec<StudyItem> = data.iter().map(|d| StudyItem::from(d.to_owned())).collect();
+
+    let list = StudyList::new(items);
+
+    ctx.db_mut()?.insert_study_list(list)?;
+
     Ok(())
 }
 
@@ -56,7 +69,33 @@ pub struct ListArgs {
     status: Option<String>,
 }
 
-fn handle_list(_ctx: &Context, _args: &ListArgs) -> Result<(), anyhow::Error> {
-    println!("not implemented yet");
+fn handle_list(ctx: &mut GlobalContext, args: &ListArgs) -> Result<(), anyhow::Error> {
+    let count = args.count.unwrap_or(0);
+
+    let list = ctx
+        .db_mut()?
+        .get_study_list()
+        .with_context(|| "failed to get study list")?;
+
+    let mut items: Vec<StudyItem> = if count > 0 {
+        list.items.iter().take(count).cloned().collect()
+    } else {
+        list.items
+    };
+
+    // TODO: use the enum directly (currently an invalid value will be converted to
+    // "new")
+    if let Some(status) = &args.status {
+        items = items
+            .iter()
+            .filter(|i| i.status == status.as_str().into())
+            .cloned()
+            .collect();
+    }
+
+    for item in items {
+        println!("{:?}", item);
+    }
+
     Ok(())
 }

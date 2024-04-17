@@ -208,7 +208,7 @@ mod tests {
     use test_case::test_case;
 
     use super::*;
-    use crate::repositories::dictionary_repository::WordMap;
+    use crate::dictionary::WordMap;
 
     fn setup() -> Matcher {
         let dict = bincode::deserialize::<WordMap>(

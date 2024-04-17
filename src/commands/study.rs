@@ -1,7 +1,7 @@
 use clap::Args;
 use clap::Subcommand;
 
-use crate::context::Context;
+use crate::context::GlobalContext;
 use crate::handlers::CommandHandler;
 
 #[derive(Subcommand)]
@@ -23,7 +23,7 @@ pub struct StudyArgs {
 }
 
 impl CommandHandler for StudyArgs {
-    fn handle(&self, ctx: &Context) -> Result<(), anyhow::Error> {
+    fn handle(&self, ctx: &mut GlobalContext) -> Result<(), anyhow::Error> {
         match &self.commands {
             StudyCommand::New(args) => handle_new(ctx, args),
             StudyCommand::Review => Ok(println!("not implemented yet")),
@@ -47,7 +47,7 @@ pub struct NewArgs {
     name: Option<StudyListOption>,
 }
 
-fn handle_new(_ctx: &Context, _args: &NewArgs) -> Result<(), anyhow::Error> {
+fn handle_new(_ctx: &mut GlobalContext, _args: &NewArgs) -> Result<(), anyhow::Error> {
     println!("not implemented yet");
     Ok(())
 }

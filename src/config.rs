@@ -21,7 +21,7 @@ enum DirectoryType {
 }
 
 impl fmt::Display for DirectoryType {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             DirectoryType::Cache => write!(f, "cache"),
             DirectoryType::Config => write!(f, "config"),

@@ -23,6 +23,8 @@ pub enum NikaError {
     ConfigSerialization(#[from] TomlSerError),
     #[error("Config error: {0}")]
     ConfigDeserialization(#[from] TomlDeError),
+    #[error("sqlite error: {0}")]
+    Sqlite(#[from] rusqlite::Error),
 }
 
 #[derive(Error, Debug)]

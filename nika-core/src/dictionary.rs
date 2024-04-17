@@ -1,11 +1,6 @@
-#![allow(unused)]
-
 use std::collections::HashMap;
-use std::fs;
-use std::path::Path;
 
-use bincode::Error;
-use rand::seq::SliceRandom;
+use rand::prelude::SliceRandom;
 use rayon::prelude::*;
 
 use crate::models::jmdict::Kanji;
@@ -15,25 +10,14 @@ use crate::models::jmdict::Word;
 pub type WordMap = HashMap<String, Word>;
 pub type TagMap = HashMap<Tag, String>;
 
-#[derive(Debug)]
-pub struct DictionaryRepository {
+pub struct Dictionary {
     dictionary: WordMap,
     tags: TagMap,
 }
 
-impl DictionaryRepository {
-    pub fn new<P: AsRef<Path>>(words_bin_path: &P, tags_bin_path: &P) -> Result<Self, Error> {
-        let dict = bincode::deserialize::<WordMap>(&fs::read(words_bin_path)?)?;
-        let tags = bincode::deserialize::<TagMap>(&fs::read(tags_bin_path)?)?;
-
-        Ok(DictionaryRepository {
-            dictionary: dict,
-            tags,
-        })
-    }
-
+impl Dictionary {
     pub fn from(dictionary: WordMap, tags: TagMap) -> Self {
-        DictionaryRepository { dictionary, tags }
+        Dictionary { dictionary, tags }
     }
 
     pub fn word(&self, id: &str) -> Option<&Word> {
@@ -56,8 +40,8 @@ impl DictionaryRepository {
     pub fn search(&self, query: &str, common: Option<bool>) -> Vec<Word> {
         self.dictionary
             .iter()
-            .filter(|(id, word)| word.kanji.iter().any(|k| k.text.contains(query)))
-            .map(|(id, word)| {
+            .filter(|(_id, word)| word.kanji.iter().any(|k| k.text.contains(query)))
+            .map(|(_id, word)| {
                 if let Some(common) = common {
                     let mut common_word = word.clone();
 
@@ -83,14 +67,14 @@ impl DictionaryRepository {
     pub fn random_words(&self, amount: usize) -> Vec<&Word> {
         let mut rng = rand::thread_rng();
 
-        let common_words = self
-            .dictionary
-            .values()
-            .collect::<Vec<&Word>>()
-            .iter()
-            .filter(|w| w.kanji.iter().any(|x| x.common))
-            .cloned()
-            .collect::<Vec<&Word>>();
+        // let common_words = self
+        //     .dictionary
+        //     .values()
+        //     .collect::<Vec<&Word>>()
+        //     .iter()
+        //     .filter(|w| w.kanji.iter().any(|x| x.common))
+        //     .cloned()
+        //     .collect::<Vec<&Word>>();
 
         let random_keys: Vec<&String> = self
             .dictionary
@@ -118,7 +102,7 @@ mod tests {
     use super::*;
     use crate::models::jmdict::JMdict;
 
-    fn setup_repo() -> DictionaryRepository {
+    fn setup_repo() -> Dictionary {
         let fixtures_path = Path::new("tests").join("fixtures").join("words.json");
 
         let words = fs::read_to_string(fixtures_path).unwrap();
@@ -132,7 +116,7 @@ mod tests {
 
         let tags: TagMap = data.tags;
 
-        DictionaryRepository::from(words, tags)
+        Dictionary::from(words, tags)
     }
 
     mod get_word_by_id {

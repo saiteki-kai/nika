@@ -1,9 +1,11 @@
 use std::fs;
 
+use anyhow::Context;
 use anyhow::Error;
 use anyhow::Result;
 use clap::Parser;
 use clap::Subcommand;
+use directories::ProjectDirs;
 
 use crate::commands::daily::DailyArgs;
 use crate::commands::dictionary::DictionaryArgs;
@@ -12,7 +14,7 @@ use crate::commands::study::StudyArgs;
 use crate::config::app_cache_dir;
 use crate::config::app_config_dir;
 use crate::config::app_data_dir;
-use crate::context::Context;
+use crate::context::GlobalContext;
 use crate::handlers::CommandHandler;
 use crate::utils::style::STYLES;
 
@@ -38,17 +40,20 @@ enum Command {
 pub fn run() -> Result<(), Error> {
     init_folders()?;
 
-    let ctx = Context {
-        // to be defined (preferences path, data path, database path, etc.)
-    };
+    let dirs = ProjectDirs::from("", "", "nika").with_context(|| "failed to get project dirs")?;
+    let mut ctx = GlobalContext::new(dirs).with_context(|| "failed to create global context")?;
+
+    println!("{:#?}", ctx.prefs()?);
+    ctx.prefs()?.save()?;
+    println!("{:#?}", ctx.prefs()?);
 
     let cli = Cli::parse();
 
     match &cli.commands {
-        Command::Study(args) => args.handle(&ctx),
-        Command::Daily(args) => args.handle(&ctx),
-        Command::Discovery(args) => args.handle(&ctx),
-        Command::Dictionary(args) => args.handle(&ctx),
+        Command::Study(args) => args.handle(&mut ctx),
+        Command::Daily(args) => args.handle(&mut ctx),
+        Command::Discovery(args) => args.handle(&mut ctx),
+        Command::Dictionary(args) => args.handle(&mut ctx),
     }
 }
 
