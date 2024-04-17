@@ -8,6 +8,8 @@ fi
 
 INSTALL_DIR=$LOCAL_INSTALL_DIR
 
+cp matching/dist/extract_words $INSTALL_DIR
+
 # Build project
 cargo build --release
 
