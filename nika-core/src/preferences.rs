@@ -6,7 +6,12 @@ use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
 use crate::errors::Result;
-use crate::models::link::Link;
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Link {
+    pub text: String,
+    pub base_url: String,
+}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UserPreferences {

@@ -1,53 +1,128 @@
-use std::fs;
-use std::path::Path;
-
+use chrono::DateTime;
+use chrono::Utc;
+use rusqlite::types::FromSql;
+use rusqlite::types::FromSqlResult;
+use rusqlite::types::ToSqlOutput;
+use rusqlite::types::ValueRef;
+use rusqlite::ToSql;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
-use crate::errors::Result;
-
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
-pub struct StudyConfig {
-    pub current_index: usize,
-    pub items_per_day: usize,
+#[derive(Clone, Copy, Deserialize, Serialize, PartialEq, Eq, Debug)]
+pub enum Status {
+    Skipped,
+    Discarded,
+    Done,
+    New,
 }
 
-impl Default for StudyConfig {
-    fn default() -> Self {
-        Self {
-            current_index: 0,
-            items_per_day: 5,
+impl From<&Status> for String {
+    fn from(value: &Status) -> Self {
+        match &value {
+            Status::Skipped => "skipped".into(),
+            Status::Discarded => "discarded".into(),
+            Status::Done => "done".into(),
+            Status::New => "todo".into(),
         }
+    }
+}
+
+impl From<&str> for Status {
+    fn from(value: &str) -> Self {
+        match value {
+            "skipped" => Status::Skipped,
+            "discarded" => Status::Discarded,
+            "done" => Status::Done,
+            "todo" => Status::New,
+            _ => Status::New,
+        }
+    }
+}
+
+impl From<&Status> for &[u8] {
+    fn from(val: &Status) -> Self {
+        match val {
+            Status::Skipped => b"skipped",
+            Status::Discarded => b"discarded",
+            Status::Done => b"done",
+            Status::New => b"todo",
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
+pub struct StudyItem {
+    pub word_id: String,
+    pub status: Status,
+    pub updated_at: i64,
+}
+
+impl StudyItem {
+    pub fn new(word_id: String, status: Status, updated_at: i64) -> Self {
+        Self {
+            word_id,
+            status,
+            updated_at,
+        }
+    }
+
+    pub fn from(word_id: String) -> Self {
+        Self::new(word_id, Status::New, Utc::now().timestamp_micros())
+    }
+
+    pub fn date(&self) -> Option<DateTime<Utc>> {
+        DateTime::from_timestamp_micros(self.updated_at)
+    }
+}
+
+impl ToSql for Status {
+    fn to_sql(&self) -> rusqlite::Result<ToSqlOutput<'_>> {
+        let value = ValueRef::Text(self.into());
+        Ok(ToSqlOutput::Borrowed(value))
+    }
+}
+
+impl FromSql for Status {
+    fn column_result(value: ValueRef<'_>) -> FromSqlResult<Self> {
+        Ok(Status::from(value.as_str()?))
     }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 pub struct StudyList {
-    pub name: String,
-    pub config: StudyConfig,
-    pub items: Vec<String>,
+    // pub name: String,
+    pub items: Vec<StudyItem>,
 }
 
 impl StudyList {
-    pub fn new(name: &str, items: Vec<String>) -> Self {
-        Self {
-            name: name.to_string(),
-            config: StudyConfig::default(),
-            items,
-        }
+    pub fn new(items: Vec<StudyItem>) -> Self {
+        Self { items }
     }
 
-    pub fn load<P: AsRef<Path>>(filepath: &P) -> Result<StudyList> {
-        let file = fs::read(filepath)?;
-        let config = bincode::deserialize::<StudyList>(&file)?;
-
-        Ok(config)
+    pub fn total(&self) -> usize {
+        self.items.len()
     }
 
-    pub fn save<P: AsRef<Path>>(filepath: &P, study_list: StudyList) -> Result<()> {
-        let content = bincode::serialize::<StudyList>(&study_list)?;
-        fs::write(filepath, content)?;
+    pub fn done(&self) -> usize {
+        self.count(Status::Done)
+    }
 
-        Ok(())
+    pub fn todo(&self) -> usize {
+        self.count(Status::New)
+    }
+
+    pub fn skipped(&self) -> usize {
+        self.count(Status::Skipped)
+    }
+
+    pub fn discarded(&self) -> usize {
+        self.count(Status::Discarded)
+    }
+
+    fn count(&self, status: Status) -> usize {
+        self.items
+            .iter()
+            .filter(|item| item.status == status)
+            .count()
     }
 }
