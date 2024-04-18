@@ -94,34 +94,23 @@ impl Dictionary {
 #[cfg(test)]
 mod tests {
     use std::fs;
-    use std::path::Path;
 
     use super::*;
-    use crate::models::jmdict::JMdict;
 
-    fn setup_repo() -> Dictionary {
-        let fixtures_path = Path::new("tests").join("fixtures").join("words.json");
-
-        let words = fs::read_to_string(fixtures_path).unwrap();
-        let data: JMdict = serde_json::from_str(&words).unwrap();
-
-        let words: WordMap = data
-            .words
-            .into_par_iter()
-            .map(|word| (word.id.clone(), word))
-            .collect();
-
-        let tags: TagMap = data.tags;
+    fn setup() -> Dictionary {
+        let contents = fs::read_to_string("tests/fixtures/words.json").expect("cannot read words");
+        let words: WordMap = serde_json::from_str(&contents).expect("cannot load words");
+        let tags = HashMap::new();
 
         Dictionary::from(words, tags)
     }
 
     mod get_word_by_id {
-        use super::setup_repo;
+        use super::setup;
 
         #[test]
         fn test_existing_id() {
-            let repo = setup_repo();
+            let repo = setup();
 
             let res = repo.word("1358280");
             assert!(res.is_some());
@@ -133,7 +122,7 @@ mod tests {
 
         #[test]
         fn test_non_existing_id() {
-            let repo = setup_repo();
+            let repo = setup();
 
             let res = repo.word("9999999");
             assert!(res.is_none());
@@ -141,11 +130,11 @@ mod tests {
     }
 
     mod get_words {
-        use super::setup_repo;
+        use super::setup;
 
         #[test]
         fn test_all_existing_ids() {
-            let repo = setup_repo();
+            let repo = setup();
 
             let ids: Vec<&str> = vec!["1008590", "1318720"];
             let n_elements = ids.len();
@@ -160,7 +149,7 @@ mod tests {
 
         #[test]
         fn test_one_existing_id() {
-            let repo = setup_repo();
+            let repo = setup();
 
             let ids: Vec<&str> = vec!["0000000", "1318720", "0000001"];
 
@@ -172,7 +161,7 @@ mod tests {
 
         #[test]
         fn test_all_non_existing_ids() {
-            let repo = setup_repo();
+            let repo = setup();
 
             let ids: Vec<&str> = vec!["0000000", "0000001"];
 
@@ -182,7 +171,7 @@ mod tests {
 
         #[test]
         fn test_empty() {
-            let repo = setup_repo();
+            let repo = setup();
 
             let ids: Vec<&str> = vec![];
 
@@ -192,11 +181,11 @@ mod tests {
     }
 
     mod random_words {
-        use super::setup_repo;
+        use super::setup;
 
         #[test]
         fn test_zero_random_words() {
-            let repo = setup_repo();
+            let repo = setup();
 
             let res = repo.random_words(0);
             assert!(res.is_empty());
@@ -204,7 +193,7 @@ mod tests {
 
         #[test]
         fn test_one_random_word() {
-            let repo = setup_repo();
+            let repo = setup();
 
             let res = repo.random_words(1);
             assert_eq!(res.len(), 1);
@@ -212,7 +201,7 @@ mod tests {
 
         #[test]
         fn test_duplicated_words() {
-            let repo = setup_repo();
+            let repo = setup();
 
             let res = repo.random_words(4);
             assert_eq!(res.len(), 4);
@@ -225,7 +214,7 @@ mod tests {
 
         #[test]
         fn test_more_than_total_words() {
-            let repo = setup_repo();
+            let repo = setup();
             let total = repo.num_words();
 
             let res = repo.random_words(total + 1);
