@@ -52,8 +52,13 @@ fn handle_import(ctx: &GlobalContext, args: &ImportArgs) -> CliResult<()> {
 
     let db = ctx.db()?;
 
+    let pbar = indicatif::ProgressBar::new(list.items.len() as u64);
+    pbar.set_style(indicatif::ProgressStyle::default_spinner());
+    pbar.set_message("importing words...");
+
     for item in list.items {
         db.insert_study_item(item)?;
+        pbar.inc(1);
     }
 
     Ok(())
