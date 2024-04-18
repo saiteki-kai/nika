@@ -203,7 +203,6 @@ fn filter_kanji_kana(
 #[cfg(test)]
 mod tests {
     use std::fs;
-    use std::path::PathBuf;
 
     use test_case::test_case;
 
@@ -211,13 +210,17 @@ mod tests {
     use crate::dictionary::WordMap;
 
     fn setup() -> Matcher {
-        let dict = bincode::deserialize::<WordMap>(
-            &fs::read(PathBuf::from("/home/giuseppe/.local/share/nika/jmdict-words.bin").as_path())
-                .expect("cannot read words"),
+        let word_map = serde_json::from_str::<WordMap>(
+            &fs::read_to_string("tests/fixtures/words.json").expect("cannot read words"),
         )
         .expect("cannot load words");
 
-        Matcher::new(dict.values().cloned().collect(), HashMap::new())
+        let senses_map = serde_json::from_str::<HashMap<String, HashSet<String>>>(
+            &fs::read_to_string("tests/fixtures/senses.json").expect("cannot read words"),
+        )
+        .expect("cannot load senses");
+
+        Matcher::new(word_map.values().cloned().collect(), senses_map)
     }
 
     #[test]
@@ -236,7 +239,7 @@ mod tests {
         let matcher = setup();
 
         let query = Query::new(Some(kanji_or_kana.to_owned()), None, None);
-        let results = matcher.find(&query, None, None);
+        let results = matcher.find(&query, None, Some(true));
 
         assert_eq!(results.len(), count);
     }
