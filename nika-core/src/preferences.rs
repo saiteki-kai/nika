@@ -5,7 +5,7 @@ use std::path::PathBuf;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
 
-use crate::errors::Result;
+use crate::errors::NikaResult;
 
 #[derive(Debug, Clone, Serialize, Deserialize, Eq, PartialEq)]
 pub struct Link {
@@ -66,7 +66,7 @@ impl UserPreferences {
 
 impl UserPreferences {
     /// Save user preferences to file.
-    pub fn save(&self) -> Result<()> {
+    pub fn save(&self) -> NikaResult<()> {
         let content = serde_json::to_string_pretty::<Self>(self)?;
         fs::write(&self.filepath, content)?;
 
@@ -75,7 +75,7 @@ impl UserPreferences {
 
     /// Load user preferences from file or return default preferences if file
     /// doesn't exist.
-    pub fn load<P: AsRef<Path>>(filepath: &P) -> Result<Self> {
+    pub fn load<P: AsRef<Path>>(filepath: &P) -> NikaResult<Self> {
         if !filepath.as_ref().exists() {
             let default_config = Self::new(filepath);
             default_config.save()?;

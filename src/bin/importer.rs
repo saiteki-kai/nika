@@ -13,7 +13,7 @@ use nika_core::dictionary::WordMap;
 use nika_core::importer::matching::Matcher;
 use nika_core::importer::query::Query;
 use nika_core::models::jmdict::Word;
-use nika_core::models::study_list::StudyItem;
+use nika_core::models::study_list::DailyItem;
 use rayon::prelude::*;
 use serde_derive::Deserialize;
 use serde_derive::Serialize;
@@ -113,8 +113,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     let _list = match_results
         .matches
         .iter()
-        .map(|id| StudyItem::from(id.clone()))
-        .collect::<Vec<StudyItem>>();
+        .enumerate()
+        .map(|(i, id)| DailyItem::new(id.clone(), i as i64))
+        .collect::<Vec<DailyItem>>();
 
     Ok(())
 }

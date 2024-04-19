@@ -6,7 +6,7 @@ use serde_json::Error as SerdeError;
 use toml::de::Error as TomlDeError;
 use toml::ser::Error as TomlSerError;
 
-pub type Result<T, E = NikaError> = result::Result<T, E>;
+pub type NikaResult<T, E = NikaError> = result::Result<T, E>;
 
 #[derive(thiserror::Error, Debug)]
 pub enum NikaError {

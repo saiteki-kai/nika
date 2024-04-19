@@ -5,8 +5,8 @@ use std::path::PathBuf;
 use anyhow::Context;
 use clap::Args;
 use clap::Subcommand;
-use nika_core::models::study_list::StudyItem;
-use nika_core::models::study_list::StudyList;
+use nika_core::models::study_list::DailyItem;
+use nika_core::models::study_list::DailyList;
 
 use crate::context::GlobalContext;
 use crate::error::CliResult;
@@ -46,9 +46,13 @@ fn handle_import(ctx: &GlobalContext, args: &ImportArgs) -> CliResult<()> {
     let content = fs::read_to_string(args.file.as_path())?;
 
     let data: HashSet<String> = content.lines().map(|s| s.to_string()).collect();
-    let items: Vec<StudyItem> = data.iter().map(|d| StudyItem::from(d.to_owned())).collect();
+    let items: Vec<DailyItem> = data
+        .iter()
+        .enumerate()
+        .map(|(i, d)| DailyItem::new(d.to_owned(), i as i64))
+        .collect();
 
-    let list = StudyList::new(items);
+    let list = DailyList::new(items);
 
     let db = ctx.db()?;
 
@@ -56,10 +60,7 @@ fn handle_import(ctx: &GlobalContext, args: &ImportArgs) -> CliResult<()> {
     pbar.set_style(indicatif::ProgressStyle::default_spinner());
     pbar.set_message("importing words...");
 
-    for item in list.items {
-        db.insert_study_item(item)?;
-        pbar.inc(1);
-    }
+    db.import_daily_list(list)?;
 
     Ok(())
 }
@@ -84,10 +85,10 @@ fn handle_list(ctx: &GlobalContext, args: &ListArgs) -> CliResult<()> {
 
     let list = ctx
         .db()?
-        .get_study_list()
+        .get_daily_list()
         .with_context(|| "failed to get study list")?;
 
-    let mut items: Vec<StudyItem> = if count > 0 {
+    let mut items: Vec<DailyItem> = if count > 0 {
         list.items.iter().take(count).cloned().collect()
     } else {
         list.items
@@ -98,7 +99,7 @@ fn handle_list(ctx: &GlobalContext, args: &ListArgs) -> CliResult<()> {
     if let Some(status) = &args.status {
         items = items
             .iter()
-            .filter(|i| i.status == status.as_str().into())
+            .filter(|i| i.progress.status == status.as_str().into())
             .cloned()
             .collect();
     }

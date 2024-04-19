@@ -90,7 +90,7 @@ fn handle_new(ctx: &GlobalContext, args: &NewArgs) -> CliResult<()> {
 }
 
 pub fn study_words(ctx: &GlobalContext, daily: bool) -> CliResult<Vec<&Word>> {
-    let list = ctx
+    let items = ctx
         .db()?
         .get_study_list()
         .with_context(|| "failed to get study list")?;
@@ -98,7 +98,7 @@ pub fn study_words(ctx: &GlobalContext, daily: bool) -> CliResult<Vec<&Word>> {
     let index = 0; // study_list.config.current_index;
     let count = 5; // study_list.config.items_per_day;
 
-    let id_list = list.items.iter().map(|item| item.word_id.as_str());
+    let id_list = items.iter().map(|item| item.word_id.as_str());
 
     let ids: Vec<&str> = if !daily {
         id_list.collect()

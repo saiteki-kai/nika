@@ -1,8 +1,21 @@
 CREATE TABLE
-    IF NOT EXISTS study_list (
-        word_id TEXT PRIMARY KEY, -- NOT NULL UNIQUE,
-        status TEXT NOT NULL,
-        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    IF NOT EXISTS study_item_progress (
+        word_id TEXT PRIMARY KEY, -- word id
+        status TEXT NOT NULL, -- status of the word
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP, -- date when the word was added
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP -- date when the word was last updated
+    );
+
+CREATE TABLE
+    IF NOT EXISTS daily_list (
+        word_id TEXT PRIMARY KEY, -- word id
+        sort_index INTEGER NOT NULL UNIQUE -- order of the word in the study list
+    );
+
+CREATE TABLE
+    IF NOT EXISTS discovery_list (
+        word_id TEXT PRIMARY KEY, -- word id
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP -- date when the word was added
     );
 
 CREATE TABLE

@@ -14,7 +14,8 @@ Main Features:
 - [x] Dictionary simple search
 - [x] Random words
 - [x] User preferences (e.g. number of daily words)
-- [x] Study lists
+- [x] Daily list
+- [ ] Discovery list
 - [ ] Daily words
 - [ ] Mark word/kanji status (skipped, done, etc.)
 - [ ] Progress tracking (e.g. streak, average words per day)
@@ -25,6 +26,7 @@ Main Features:
 
 Future Features:
 
+- [ ] Multiple study lists
 - [ ] DBpedia definitions
 - [ ] Morphological analysis of sentences
 - [ ] Daily grammar

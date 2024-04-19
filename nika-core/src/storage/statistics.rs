@@ -2,7 +2,7 @@ use rusqlite::params;
 use rusqlite::Row;
 
 use super::sqlite::Storage;
-use crate::errors::Result;
+use crate::errors::NikaResult;
 use crate::models::statistics::Statistics;
 
 fn row_to_statistics(row: &Row) -> rusqlite::Result<Statistics, rusqlite::Error> {
@@ -17,17 +17,17 @@ fn row_to_statistics(row: &Row) -> rusqlite::Result<Statistics, rusqlite::Error>
 }
 
 impl Storage {
-    pub fn get_all_statistics(&mut self) -> Result<Vec<Statistics>> {
+    pub fn get_all_statistics(&mut self) -> NikaResult<Vec<Statistics>> {
         let rows = self
             .db
             .prepare("SELECT streak, done, due, date FROM statistics")?
             .query_map(params![], row_to_statistics)?
-            .collect::<Result<Vec<Statistics>, _>>()?;
+            .collect::<NikaResult<Vec<Statistics>, _>>()?;
 
         Ok(rows)
     }
 
-    pub fn get_statistics_by_date(&mut self, timestamp: String) -> Result<Statistics> {
+    pub fn get_statistics_by_date(&mut self, timestamp: String) -> NikaResult<Statistics> {
         let row = self
             .db
             .prepare("SELECT streak, done, due, date FROM statistics WHERE date = ?1")?
@@ -36,7 +36,7 @@ impl Storage {
         Ok(row)
     }
 
-    pub fn update_statistics(&mut self, stats: Statistics) -> Result<()> {
+    pub fn update_statistics(&mut self, stats: Statistics) -> NikaResult<()> {
         // TODO: filter by date / id
 
         self.db

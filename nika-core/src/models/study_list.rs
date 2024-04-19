@@ -5,10 +5,8 @@ use rusqlite::types::FromSqlResult;
 use rusqlite::types::ToSqlOutput;
 use rusqlite::types::ValueRef;
 use rusqlite::ToSql;
-use serde_derive::Deserialize;
-use serde_derive::Serialize;
 
-#[derive(Clone, Copy, Deserialize, Serialize, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Status {
     Skipped,
     Discarded,
@@ -50,31 +48,6 @@ impl From<&Status> for &[u8] {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
-pub struct StudyItem {
-    pub word_id: String,
-    pub status: Status,
-    pub updated_at: i64,
-}
-
-impl StudyItem {
-    pub fn new(word_id: String, status: Status, updated_at: i64) -> Self {
-        Self {
-            word_id,
-            status,
-            updated_at,
-        }
-    }
-
-    pub fn from(word_id: String) -> Self {
-        Self::new(word_id, Status::New, Utc::now().timestamp_micros())
-    }
-
-    pub fn date(&self) -> Option<DateTime<Utc>> {
-        DateTime::from_timestamp_micros(self.updated_at)
-    }
-}
-
 impl ToSql for Status {
     fn to_sql(&self) -> rusqlite::Result<ToSqlOutput<'_>> {
         let value = ValueRef::Text(self.into());
@@ -88,41 +61,104 @@ impl FromSql for Status {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
-pub struct StudyList {
-    // pub name: String,
-    pub items: Vec<StudyItem>,
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct StudyItemProgress {
+    pub status: Status,
+    pub created_at: i64,
+    pub updated_at: i64,
 }
 
-impl StudyList {
-    pub fn new(items: Vec<StudyItem>) -> Self {
+impl Default for StudyItemProgress {
+    fn default() -> Self {
+        let now = Utc::now().timestamp_micros();
+
+        Self {
+            status: Status::New,
+            created_at: now,
+            updated_at: now,
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct DailyItem {
+    pub word_id: String,
+    pub progress: StudyItemProgress,
+    pub sort_index: i64,
+}
+
+impl DailyItem {
+    pub fn new(word_id: String, sort_index: i64) -> Self {
+        Self {
+            word_id,
+            progress: StudyItemProgress::default(),
+            sort_index,
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct DiscoveryItem {
+    pub word_id: String,
+    pub progress: StudyItemProgress,
+    pub created_at: i64,
+}
+
+impl DiscoveryItem {
+    pub fn new(word_id: String, created_at: i64) -> Self {
+        Self {
+            word_id,
+            progress: StudyItemProgress::default(),
+            created_at,
+        }
+    }
+}
+
+pub trait HasProgressStatus {
+    fn status(&self) -> Status;
+}
+
+impl HasProgressStatus for DailyItem {
+    fn status(&self) -> Status {
+        self.progress.status
+    }
+}
+
+impl HasProgressStatus for DiscoveryItem {
+    fn status(&self) -> Status {
+        self.progress.status
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct StudyList<T> {
+    pub items: Vec<T>,
+}
+
+impl<T: HasProgressStatus> StudyList<T> {
+    pub fn new(items: Vec<T>) -> Self {
         Self { items }
     }
 
-    pub fn total(&self) -> usize {
+    pub fn len(&self) -> usize {
         self.items.len()
     }
 
-    pub fn done(&self) -> usize {
-        self.count(Status::Done)
+    pub fn is_empty(&self) -> bool {
+        self.items.is_empty()
     }
 
-    pub fn todo(&self) -> usize {
-        self.count(Status::New)
-    }
-
-    pub fn skipped(&self) -> usize {
-        self.count(Status::Skipped)
-    }
-
-    pub fn discarded(&self) -> usize {
-        self.count(Status::Discarded)
-    }
-
-    fn count(&self, status: Status) -> usize {
+    pub fn count(&self, status: Status) -> usize {
         self.items
             .iter()
-            .filter(|item| item.status == status)
+            .filter(|item| item.status() == status)
             .count()
     }
+}
+
+pub type DailyList = StudyList<DailyItem>;
+pub type DiscoveryList = StudyList<DiscoveryItem>;
+
+pub fn date(timestamp: i64) -> Option<DateTime<Utc>> {
+    DateTime::from_timestamp_micros(timestamp)
 }
