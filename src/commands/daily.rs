@@ -5,12 +5,13 @@ use std::path::PathBuf;
 use anyhow::Context;
 use clap::Args;
 use clap::Subcommand;
-use nika_core::models::study_list::DailyItem;
+use nika_core::models::study_item::DailyItem;
 use nika_core::models::study_list::DailyList;
 
 use crate::context::GlobalContext;
 use crate::error::CliResult;
 use crate::handlers::CommandHandler;
+use crate::messages::EMPTY_DAILY_LIST;
 
 #[derive(Subcommand)]
 enum DailyCommand {
@@ -43,8 +44,17 @@ struct ImportArgs {
 }
 
 fn handle_import(ctx: &GlobalContext, args: &ImportArgs) -> CliResult<()> {
+    // call import function to dispatch to the correct handler
     let content = fs::read_to_string(args.file.as_path())?;
 
+    // with queries
+    // let data = serde_json::from_str::<Vec<Query>>(&content)?;
+
+    // perform matching
+    // let items =
+
+    // with ids
+    // ! (do not use the hashset, you lose the order)
     let data: HashSet<String> = content.lines().map(|s| s.to_string()).collect();
     let items: Vec<DailyItem> = data
         .iter()
@@ -87,6 +97,12 @@ fn handle_list(ctx: &GlobalContext, args: &ListArgs) -> CliResult<()> {
         .db()?
         .get_daily_list()
         .with_context(|| "failed to get study list")?;
+
+    if list.is_empty() {
+        println!("{}", EMPTY_DAILY_LIST);
+
+        return Ok(());
+    }
 
     let mut items: Vec<DailyItem> = if count > 0 {
         list.items.iter().take(count).cloned().collect()

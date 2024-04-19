@@ -5,10 +5,10 @@ use rusqlite::Row;
 
 use super::sqlite::Storage;
 use crate::errors::NikaResult;
-use crate::models::study_list::DailyItem;
+use crate::models::study_item::DailyItem;
+use crate::models::study_item::Status;
+use crate::models::study_item::StudyItemProgress;
 use crate::models::study_list::DailyList;
-use crate::models::study_list::Status;
-use crate::models::study_list::StudyItemProgress;
 
 impl Storage {
     pub fn get_daily_list(&self) -> NikaResult<DailyList> {
@@ -17,7 +17,7 @@ impl Storage {
             .prepare(
                 "SELECT s.word_id, s.status, s.created_at, s.updated_at, d.sort_index
                  FROM study_item_progress as s
-                 JOIN daily_list as d ON s.word_id = d.word_id 
+                 JOIN daily_list as d ON s.word_id = d.word_id
                  ORDER BY d.sort_index",
             )?
             .query_map(params![], row_to_daily_item)?
