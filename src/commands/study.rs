@@ -2,10 +2,10 @@ use anyhow::Context;
 use anyhow::Ok;
 use clap::Args;
 use clap::Subcommand;
-use nika_core::models::jmdict::Kana;
-use nika_core::models::jmdict::Kanji;
-use nika_core::models::jmdict::Sense;
-use nika_core::models::jmdict::Word;
+use nika_core::models::dictionary::jmdict::Kana;
+use nika_core::models::dictionary::jmdict::Kanji;
+use nika_core::models::dictionary::jmdict::Sense;
+use nika_core::models::dictionary::jmdict::Word;
 use nika_core::preferences::Link;
 
 use crate::context::GlobalContext;

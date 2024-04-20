@@ -1,4 +1,4 @@
-use nika_core::models::jmdict::Word;
+use nika_core::models::dictionary::jmdict::Word;
 
 pub enum DisplayMode {
     Short,

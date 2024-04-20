@@ -5,10 +5,10 @@ use rusqlite::Row;
 
 use super::sqlite::Storage;
 use crate::errors::NikaResult;
-use crate::models::study_item::DailyItem;
-use crate::models::study_item::Status;
-use crate::models::study_item::StudyItemProgress;
-use crate::models::study_list::DailyList;
+use crate::models::study::DailyItem;
+use crate::models::study::DailyList;
+use crate::models::study::Status;
+use crate::models::study::StudyItemProgress;
 
 impl Storage {
     pub fn get_daily_list(&self) -> NikaResult<DailyList> {

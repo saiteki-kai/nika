@@ -3,9 +3,9 @@ use std::collections::HashMap;
 use rand::prelude::SliceRandom;
 use rayon::prelude::*;
 
-use crate::models::jmdict::Kanji;
-use crate::models::jmdict::Tag;
-use crate::models::jmdict::Word;
+use crate::models::dictionary::jmdict::Kanji;
+use crate::models::dictionary::jmdict::Tag;
+use crate::models::dictionary::jmdict::Word;
 
 pub type WordMap = HashMap<String, Word>;
 pub type TagMap = HashMap<Tag, String>;

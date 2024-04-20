@@ -5,8 +5,8 @@ use std::path::PathBuf;
 use anyhow::Context;
 use clap::Args;
 use clap::Subcommand;
-use nika_core::models::study_item::DailyItem;
-use nika_core::models::study_list::DailyList;
+use nika_core::models::study::DailyItem;
+use nika_core::models::study::DailyList;
 
 use crate::context::GlobalContext;
 use crate::error::CliResult;

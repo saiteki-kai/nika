@@ -1,5 +1,5 @@
 use clap::ValueEnum;
-use nika_core::models::study_item::Status;
+use nika_core::models::study::Status;
 
 #[derive(ValueEnum, Clone)]
 pub enum WordStatus {

@@ -1,6 +1,6 @@
 use super::study_item::DailyItem;
 use super::study_item::DiscoveryItem;
-use super::study_item::Status;
+use super::word_status::Status;
 
 pub trait HasProgressStatus {
     fn status(&self) -> Status;

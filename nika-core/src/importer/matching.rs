@@ -4,9 +4,9 @@ use std::collections::HashSet;
 use rayon::prelude::*;
 
 use super::query::Query;
-use crate::models::jmdict::Kana;
-use crate::models::jmdict::Kanji;
-use crate::models::jmdict::Word;
+use crate::models::dictionary::jmdict::Kana;
+use crate::models::dictionary::jmdict::Kanji;
+use crate::models::dictionary::jmdict::Word;
 use crate::utils::japanese::JapaneseString;
 
 pub struct Matcher {

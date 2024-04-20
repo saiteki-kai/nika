@@ -3,7 +3,7 @@ use rusqlite::Row;
 
 use super::sqlite::Storage;
 use crate::errors::NikaResult;
-use crate::models::statistics::StudyStatistics;
+use crate::models::study::StudyStatistics;
 
 fn row_to_statistics(row: &Row) -> rusqlite::Result<StudyStatistics, rusqlite::Error> {
     let statistics = StudyStatistics {
