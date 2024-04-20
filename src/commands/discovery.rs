@@ -6,6 +6,7 @@ use clap::Subcommand;
 use crate::context::GlobalContext;
 use crate::error::CliResult;
 use crate::handlers::CommandHandler;
+use crate::utils::status::WordStatus;
 
 #[derive(Subcommand)]
 enum DiscoveryCommand {
@@ -75,7 +76,7 @@ struct AddArgs {
     /// Reading of the word
     reading: Option<String>,
     /// Meaning of the word
-    meaning: Option<String>,
+    meaning: Option<WordStatus>,
 }
 
 fn handle_add(_ctx: &GlobalContext, _args: &AddArgs) -> CliResult<()> {

@@ -12,6 +12,7 @@ use crate::context::GlobalContext;
 use crate::error::CliResult;
 use crate::handlers::CommandHandler;
 use crate::messages::EMPTY_DAILY_LIST;
+use crate::utils::status::WordStatus;
 
 #[derive(Subcommand)]
 enum DailyCommand {
@@ -87,7 +88,7 @@ pub struct ListArgs {
 
     /// Show only the words in a specific status
     #[arg(short, long)]
-    status: Option<String>,
+    status: Option<WordStatus>,
 }
 
 fn handle_list(ctx: &GlobalContext, args: &ListArgs) -> CliResult<()> {
@@ -110,12 +111,10 @@ fn handle_list(ctx: &GlobalContext, args: &ListArgs) -> CliResult<()> {
         list.items
     };
 
-    // TODO: use the enum directly (currently an invalid value will be converted to
-    // "new")
     if let Some(status) = &args.status {
         items = items
             .iter()
-            .filter(|i| i.progress.status == status.as_str().into())
+            .filter(|i| i.progress.status == status.into())
             .cloned()
             .collect();
     }
