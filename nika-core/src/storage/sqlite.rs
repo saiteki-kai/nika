@@ -28,6 +28,15 @@ impl Storage {
 
         Ok(Self { db: connection })
     }
+
+    pub fn clear(&self) -> NikaResult<()> {
+        self.db.execute_batch("DELETE FROM study_item_progress;")?;
+        self.db.execute_batch("DELETE FROM daily_list;")?;
+        self.db.execute_batch("DELETE FROM discovery_list;")?;
+        self.db.execute_batch("DELETE FROM study_statistics;")?;
+
+        Ok(())
+    }
 }
 
 #[cfg(test)]

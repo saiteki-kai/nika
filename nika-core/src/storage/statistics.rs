@@ -3,10 +3,10 @@ use rusqlite::Row;
 
 use super::sqlite::Storage;
 use crate::errors::NikaResult;
-use crate::models::statistics::Statistics;
+use crate::models::statistics::StudyStatistics;
 
-fn row_to_statistics(row: &Row) -> rusqlite::Result<Statistics, rusqlite::Error> {
-    let statistics = Statistics {
+fn row_to_statistics(row: &Row) -> rusqlite::Result<StudyStatistics, rusqlite::Error> {
+    let statistics = StudyStatistics {
         streak: row.get(0)?,
         done: row.get(1)?,
         due: row.get(2)?,
@@ -17,17 +17,20 @@ fn row_to_statistics(row: &Row) -> rusqlite::Result<Statistics, rusqlite::Error>
 }
 
 impl Storage {
-    pub fn get_all_statistics(&mut self) -> NikaResult<Vec<Statistics>> {
+    pub fn get_study_statistics(&mut self) -> NikaResult<Vec<StudyStatistics>> {
         let rows = self
             .db
             .prepare("SELECT streak, done, due, date FROM statistics")?
             .query_map(params![], row_to_statistics)?
-            .collect::<NikaResult<Vec<Statistics>, _>>()?;
+            .collect::<NikaResult<Vec<StudyStatistics>, _>>()?;
 
         Ok(rows)
     }
 
-    pub fn get_statistics_by_date(&mut self, timestamp: String) -> NikaResult<Statistics> {
+    pub fn get_study_statistics_by_date(
+        &mut self,
+        timestamp: String,
+    ) -> NikaResult<StudyStatistics> {
         let row = self
             .db
             .prepare("SELECT streak, done, due, date FROM statistics WHERE date = ?1")?
@@ -36,7 +39,7 @@ impl Storage {
         Ok(row)
     }
 
-    pub fn update_statistics(&mut self, stats: Statistics) -> NikaResult<()> {
+    pub fn update_study_statistics(&mut self, stats: StudyStatistics) -> NikaResult<()> {
         // TODO: filter by date / id
 
         self.db
@@ -52,10 +55,10 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_get_all_statistics() {
+    fn test_get_study_statistics() {
         let mut storage = Storage::open_in_memory().expect("failed to open storage");
 
-        let result = storage.get_all_statistics();
+        let result = storage.get_study_statistics();
         assert!(result.is_ok());
 
         let stats = result.unwrap();
@@ -66,11 +69,11 @@ mod tests {
     fn test_get_statistics_by_date() {
         let mut storage = Storage::open_in_memory().expect("failed to open storage");
 
-        let stats = Statistics::new(10, 2, 5, "2024-04-04".to_owned());
+        let stats = StudyStatistics::new(10, 2, 5, "2024-04-04".to_owned());
 
-        storage.update_statistics(stats).unwrap();
+        storage.update_study_statistics(stats).unwrap();
 
-        let result = storage.get_statistics_by_date("2024-04-04".to_owned());
+        let result = storage.get_study_statistics_by_date("2024-04-04".to_owned());
         assert!(result.is_ok());
 
         let stats = result.unwrap();

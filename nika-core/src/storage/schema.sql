@@ -19,7 +19,7 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    IF NOT EXISTS statistics (
+    IF NOT EXISTS study_statistics (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         due INTEGER NOT NULL, -- total number of words due today
         done INTEGER NOT NULL, -- total number of words done today
