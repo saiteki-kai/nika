@@ -1,4 +1,5 @@
 use super::study_item_progress::StudyItemProgress;
+use super::Status;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DailyItem {
@@ -12,6 +13,17 @@ impl DailyItem {
         Self {
             word_id,
             progress: StudyItemProgress::default(),
+            sort_index,
+        }
+    }
+
+    pub fn from(word_id: String, sort_index: i64, status: Status) -> Self {
+        Self {
+            word_id,
+            progress: StudyItemProgress {
+                status,
+                ..Default::default()
+            },
             sort_index,
         }
     }
@@ -31,5 +43,32 @@ impl DiscoveryItem {
             progress: StudyItemProgress::default(),
             created_at,
         }
+    }
+
+    pub fn from(word_id: String, created_at: i64, status: Status) -> Self {
+        Self {
+            word_id,
+            progress: StudyItemProgress {
+                status,
+                ..Default::default()
+            },
+            created_at,
+        }
+    }
+}
+
+pub trait HasProgressStatus {
+    fn status(&self) -> Status;
+}
+
+impl HasProgressStatus for DailyItem {
+    fn status(&self) -> Status {
+        self.progress.status
+    }
+}
+
+impl HasProgressStatus for DiscoveryItem {
+    fn status(&self) -> Status {
+        self.progress.status
     }
 }
