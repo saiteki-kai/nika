@@ -20,7 +20,7 @@ impl Storage {
     pub fn get_study_statistics(&mut self) -> NikaResult<Vec<StudyStatistics>> {
         let rows = self
             .db
-            .prepare("SELECT streak, done, due, date FROM statistics")?
+            .prepare("SELECT streak, done, due, date FROM study_statistics")?
             .query_map(params![], row_to_statistics)?
             .collect::<NikaResult<Vec<StudyStatistics>, _>>()?;
 
@@ -33,7 +33,7 @@ impl Storage {
     ) -> NikaResult<StudyStatistics> {
         let row = self
             .db
-            .prepare("SELECT streak, done, due, date FROM statistics WHERE date = ?1")?
+            .prepare("SELECT streak, done, due, date FROM study_statistics WHERE date = ?1")?
             .query_row(params![timestamp], row_to_statistics)?;
 
         Ok(row)
@@ -43,7 +43,7 @@ impl Storage {
         // TODO: filter by date / id
 
         self.db
-            .prepare("INSERT OR REPLACE INTO statistics (date, streak, done, due) VALUES (?1, ?2, ?3, ?4)")?
+            .prepare("INSERT OR REPLACE INTO study_statistics (date, streak, done, due) VALUES (?1, ?2, ?3, ?4)")?
             .execute(params![stats.date, stats.streak, stats.done, stats.due])?;
 
         Ok(())
