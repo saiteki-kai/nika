@@ -11,7 +11,7 @@ use nika_core::models::study_list::DailyList;
 use crate::context::GlobalContext;
 use crate::error::CliResult;
 use crate::handlers::CommandHandler;
-use crate::messages::EMPTY_DAILY_LIST;
+use crate::messages::*;
 use crate::utils::status::WordStatus;
 
 #[derive(Subcommand)]
@@ -100,7 +100,7 @@ fn handle_list(ctx: &GlobalContext, args: &ListArgs) -> CliResult<()> {
         .with_context(|| "failed to get study list")?;
 
     if list.is_empty() {
-        println!("{}", EMPTY_DAILY_LIST);
+        println!("{}", DAILY_LIST_EMPTY);
 
         return Ok(());
     }
@@ -117,6 +117,12 @@ fn handle_list(ctx: &GlobalContext, args: &ListArgs) -> CliResult<()> {
             .filter(|i| i.progress.status == status.into())
             .cloned()
             .collect();
+    }
+
+    if items.is_empty() {
+        println!("{}", DAILY_LIST_NO_RESULTS);
+
+        return Ok(());
     }
 
     for item in items {

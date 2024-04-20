@@ -1,4 +1,4 @@
-use nika::messages::EMPTY_DAILY_LIST;
+use nika::messages::DAILY_LIST_EMPTY;
 use snapbox::cmd::cargo_bin;
 use snapbox::cmd::Command;
 
@@ -8,5 +8,5 @@ fn test_empty_study_list() {
 
     cmd.assert()
         .success()
-        .stdout_matches(format!("{}\n", EMPTY_DAILY_LIST));
+        .stdout_matches(format!("{}\n", DAILY_LIST_EMPTY));
 }
