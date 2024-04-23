@@ -1,46 +1,11 @@
-use anyhow::Context;
-use anyhow::Ok;
+use anyhow::{Context, Ok};
 use clap::Args;
-use clap::Subcommand;
-use nika_core::models::dictionary::jmdict::Kana;
-use nika_core::models::dictionary::jmdict::Kanji;
-use nika_core::models::dictionary::jmdict::Sense;
-use nika_core::models::dictionary::jmdict::Word;
+use nika_core::models::dictionary::jmdict::{Kana, Kanji, Sense, Word};
 use nika_core::preferences::Link;
 
 use crate::context::GlobalContext;
 use crate::error::CliResult;
-use crate::handlers::CommandHandler;
 use crate::utils::links::generate_hyperlink;
-
-#[derive(Subcommand)]
-enum StudyCommand {
-    /// Study new words from daily and discovery lists
-    New(NewArgs),
-    /// Review the words you have learned
-    Review,
-    /// Mark a word as learned manually
-    Mark,
-    /// Show your progress
-    Progress,
-}
-
-#[derive(Args)]
-pub struct StudyArgs {
-    #[command(subcommand)]
-    commands: StudyCommand,
-}
-
-impl CommandHandler for StudyArgs {
-    fn handle(&self, ctx: &GlobalContext) -> CliResult<()> {
-        match &self.commands {
-            StudyCommand::New(args) => handle_new(ctx, args),
-            StudyCommand::Review => Ok(println!("not implemented yet")),
-            StudyCommand::Mark => Ok(println!("not implemented yet")),
-            StudyCommand::Progress => Ok(println!("not implemented yet")),
-        }
-    }
-}
 
 #[derive(clap::ValueEnum, Clone, Debug)]
 enum StudyListOption {
@@ -60,7 +25,7 @@ pub struct NewArgs {
     summary: bool,
 }
 
-fn handle_new(ctx: &GlobalContext, args: &NewArgs) -> CliResult<()> {
+pub fn handle_new(ctx: &GlobalContext, args: &NewArgs) -> CliResult<()> {
     let links = &ctx.prefs()?.external_dictionaries;
     let words = study_words(ctx, true)?;
 
