@@ -1,22 +1,17 @@
-use std::collections::HashMap;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::error::Error;
 use std::fs;
-use std::sync::Arc;
-use std::sync::Mutex;
+use std::sync::{Arc, Mutex};
 
 use indicatif::ProgressBar;
-use nika::config::app_cache_dir;
-use nika::config::app_data_dir;
-use nika::config::WORDS_BIN_PATH;
+use nika::config::{app_cache_dir, app_data_dir, WORDS_BIN_PATH};
 use nika_core::dictionary::WordMap;
 use nika_core::importer::matching::Matcher;
 use nika_core::importer::query::Query;
 use nika_core::models::dictionary::jmdict::Word;
 use nika_core::models::study::DailyItem;
 use rayon::prelude::*;
-use serde_derive::Deserialize;
-use serde_derive::Serialize;
+use serde_derive::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq)]
 struct ConflictResults {

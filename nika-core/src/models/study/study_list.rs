@@ -1,6 +1,4 @@
-use super::study_item::DailyItem;
-use super::study_item::DiscoveryItem;
-use super::study_item::HasProgressStatus;
+use super::study_item::{DailyItem, DiscoveryItem, HasProgressStatus};
 use super::word_status::Status;
 
 #[derive(Debug, Clone, PartialEq, Eq)]

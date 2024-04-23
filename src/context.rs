@@ -1,14 +1,11 @@
 #![allow(dead_code)]
 use std::fs;
-use std::path::Path;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use anyhow::Result;
 use directories::ProjectDirs;
 use lazycell::LazyCell;
-use nika_core::dictionary::Dictionary;
-use nika_core::dictionary::TagMap;
-use nika_core::dictionary::WordMap;
+use nika_core::dictionary::{Dictionary, TagMap, WordMap};
 use nika_core::preferences::UserPreferences;
 use nika_core::storage::sqlite::Storage;
 

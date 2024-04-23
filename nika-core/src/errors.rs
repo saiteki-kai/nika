@@ -1,5 +1,4 @@
-use std::io;
-use std::result;
+use std::{io, result};
 
 use bincode::Error as BincodeError;
 use serde_json::Error as SerdeError;

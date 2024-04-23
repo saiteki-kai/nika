@@ -1,19 +1,11 @@
 use std::fs;
 
-use anyhow::Context;
-use anyhow::Error;
-use anyhow::Result;
-use clap::Parser;
-use clap::Subcommand;
+use anyhow::{Context, Error, Result};
+use clap::{Parser, Subcommand};
 use directories::ProjectDirs;
 
-use crate::commands::daily::DailyArgs;
-use crate::commands::dictionary::DictionaryArgs;
-use crate::commands::discovery::DiscoveryArgs;
-use crate::commands::study::StudyArgs;
-use crate::config::app_cache_dir;
-use crate::config::app_config_dir;
-use crate::config::app_data_dir;
+use crate::commands::{DailyArgs, DictionaryArgs, DiscoveryArgs, StudyArgs};
+use crate::config::{app_cache_dir, app_config_dir, app_data_dir};
 use crate::context::GlobalContext;
 use crate::handlers::CommandHandler;
 use crate::utils::style::STYLES;

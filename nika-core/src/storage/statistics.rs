@@ -1,5 +1,4 @@
-use rusqlite::params;
-use rusqlite::Row;
+use rusqlite::{params, Row};
 
 use super::sqlite::Storage;
 use crate::errors::NikaResult;

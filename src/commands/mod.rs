@@ -1,4 +1,9 @@
-pub mod daily;
-pub mod dictionary;
-pub mod discovery;
-pub mod study;
+mod daily;
+mod dictionary;
+mod discovery;
+mod study;
+
+pub use daily::DailyArgs;
+pub use dictionary::DictionaryArgs;
+pub use discovery::DiscoveryArgs;
+pub use study::StudyArgs;

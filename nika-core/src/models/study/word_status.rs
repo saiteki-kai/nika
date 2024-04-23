@@ -1,9 +1,5 @@
-use rusqlite::types::FromSql;
-use rusqlite::types::FromSqlResult;
-use rusqlite::types::ToSqlOutput;
-use rusqlite::types::ValueRef;
-use rusqlite::Result;
-use rusqlite::ToSql;
+use rusqlite::types::{FromSql, FromSqlResult, ToSqlOutput, ValueRef};
+use rusqlite::{Result, ToSql};
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Status {
