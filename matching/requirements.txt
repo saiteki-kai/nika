@@ -27,7 +27,7 @@ spacy-legacy==3.0.12
 spacy-loggers==1.0.5
 srsly==2.4.8
 thinc==8.2.3
-tqdm==4.66.2
+tqdm==4.66.3
 typer==0.9.4
 typing_extensions==4.11.0
 urllib3==2.2.1
